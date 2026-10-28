@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A Toast product design case study: choosing check-centered closeout while preserving payment tip-entry progress.">
+  <meta name="theme-color" content="#f5f4ef">
+  <title>Rethinking restaurant closeout — Siyi Chen</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../presentation/motion.css">
+  <script src="../site.js" defer></script>
+  <script src="../presentation/motion.js" defer></script>
+</head>
+<body class="case-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header wrap">
+    <a class="wordmark" href="../index.html" aria-label="Siyi Chen, home">Siyi Chen<span class="wordmark-dot" aria-hidden="true"></span></a>
+    <nav aria-label="Main navigation"><a href="../index.html#work">All work</a><a href="../presentations/">Presentations</a><a href="../index.html#resume">Résumé</a></nav>
+  </header>
+  <main id="main">
+    <section class="case-hero wrap" aria-labelledby="case-title">
+      <div class="case-kicker"><span class="project-brand">Toast</span><span class="overline">Restaurant operations · Q1 2024</span></div>
+      <h1 id="case-title">A clearer close<br>to a <span class="serif-word">long shift.</span></h1>
+      <p class="case-summary">Making tip entry and check closure easier, without losing sight of incomplete work.</p>
+      <dl class="case-facts"><div><dt>My role at the time</dt><dd>Senior product designer</dd></div><div><dt>My focus</dt><dd>Solution direction &amp; interaction design</dd></div><div><dt>Partners</dt><dd>Product management &amp; engineering</dd></div><div><dt>Platform</dt><dd>POS terminals &amp; handhelds</dd></div></dl>
+      <figure class="case-hero-visual">
+        <div class="device-showcase">
+          <div class="device-terminal">
+            <img src="../presentation/assets/toast-terminal-device.png" alt="" aria-hidden="true" width="1136" height="739" fetchpriority="high">
+            <video id="hero-terminal-motion" data-motion-preview muted loop controls playsinline preload="none" poster="../presentation/assets/motion/closeout-terminal.jpg" width="800" height="464" aria-label="Animated terminal tip-entry prototype" aria-describedby="hero-motion-caption"><source src="../presentation/assets/motion/closeout-terminal.mp4" type="video/mp4"></video>
+          </div>
+          <div class="device-handheld">
+            <img src="../presentation/assets/toast-handheld-device.png" alt="" aria-hidden="true" width="498" height="1242" fetchpriority="high">
+            <video id="hero-handheld-motion" data-motion-preview muted loop controls playsinline preload="none" poster="../presentation/assets/motion/closeout-handheld.jpg" width="440" height="876" aria-label="Animated handheld tip-entry prototype" aria-describedby="hero-motion-caption"><source src="../presentation/assets/motion/closeout-handheld.mp4" type="video/mp4"></video>
+          </div>
+        </div>
+        <figcaption id="hero-motion-caption">
+          <div class="motion-caption-heading"><span>Original animated prototypes, on the original device artwork.</span><button class="motion-toggle" type="button" data-motion-toggle aria-controls="hero-terminal-motion hero-handheld-motion" hidden>Pause animations</button></div>
+          <p>Silent, looping previews. Reduced-motion preferences disable automatic playback. Original recording sizes: terminal 800 × 464; handheld 440 × 876.</p>
+          <a class="motion-original" href="../presentation/assets/motion/closeout-terminal.gif" download>Original terminal GIF ↗</a> · <a class="motion-original" href="../presentation/assets/motion/closeout-handheld.gif" download>Original handheld GIF ↗</a>
+        </figcaption>
+      </figure>
+    </section>
+
+    <div class="case-body wrap">
+      <aside class="case-contents" aria-label="Case-study contents"><p class="overline">In this case</p><nav aria-label="Case-study sections"><a href="#context">01 Context</a><a href="#constraint">02 The constraint</a><a href="#decision">03 The decision</a><a href="#design">04 The design</a><a href="#outcomes">05 Outcomes</a><a href="#reflection">06 Reflection</a></nav><a class="text-link deck-link" href="../presentation/">Presentation version ↗</a></aside>
+      <div class="case-narrative">
+        <section id="context" class="story-section" aria-labelledby="context-title">
+          <p class="overline">01 / Context</p><h2 id="context-title">The shift was over.<br>The closeout work wasn’t.</h2>
+          <p class="story-lead">Staff still had to match paper receipts to payments, add tips, and close the remaining checks. Repeated navigation made that work harder to finish.</p>
+          <p>I owned the solution direction and explored two versions. The work covered problem discovery, workflow and visual design, validation, and development follow-ups. Product management and engineering were partners in determining which direction the system could support.</p>
+          <div class="editorial-note"><span class="overline">The goal</span><p>Make closeout more efficient while keeping payment information accurate and incomplete checks visible.</p></div>
+          <figure class="story-figure"><a href="../presentation/assets/legacy-closeout.png" data-lightbox aria-haspopup="dialog"><img src="../presentation/assets/legacy-closeout.png" alt="The legacy Toast check screen, with check tiles and a separate action area." width="720" height="407" loading="lazy"><span class="image-expand" aria-hidden="true">Expand ↗</span></a><figcaption>The legacy interface. The source task comparison involved movement across several pages.</figcaption></figure>
+        </section>
+
+        <section id="constraint" class="story-section" aria-labelledby="constraint-title">
+          <p class="overline">02 / The constraint</p><h2 id="constraint-title">The unit of entry<br>wasn’t the unit of closure.</h2>
+          <p class="story-lead">A check could have multiple payments. Each payment needed tip information, but the system could only close the entire check.</p>
+          <p>If any payment was incomplete, the check had to stay open. There was no payment-level close action. Meanwhile, handwritten tip receipts could be mixed together rather than organized by check.</p>
+          <div class="web-check-model" aria-label="Illustrative check containing three payments; the second payment is incomplete, so the check remains open.">
+            <div class="web-check"><strong>One check</strong><span class="state state-open">Still open</span></div>
+            <div class="web-payments"><div><span>Payment A</span><strong>Tip entered</strong><span class="state state-done">Complete</span></div><div class="payment-incomplete"><span>Payment B</span><strong>Information missing</strong><span class="state state-open">Incomplete</span></div><div><span>Payment C</span><strong>Tip entered</strong><span class="state state-done">Complete</span></div></div>
+            <p class="caption">Illustrative model, not the Toast interface. A confirmed zero tip is different from missing information.</p>
+          </div>
+          <p>That mismatch matters: finishing one receipt does not mean every payment on the check is ready. The design had to make progress possible without suggesting the check had successfully closed.</p>
+        </section>
+
+        <section id="decision" class="story-section" aria-labelledby="decision-title">
+          <p class="overline">03 / The decision</p><h2 id="decision-title">Two versions.<br>One unsupported assumption.</h2>
+          <p>I explored a payment-first version and a check-centered version. The first fit the receipt-by-receipt task, but review with PM and engineering exposed the problem with treating payments as independently closable items.</p>
+          <div class="option-grid"><div><span class="overline">Payment-first</span><h3>Follow the receipt.</h3><p>Efficient for entering one tip at a time, but the closing model broke down when another payment on the same check was incomplete.</p><span class="option-outcome">Blocked by closure semantics</span></div><div class="chosen-option"><span class="overline">Check-centered</span><h3>Keep the whole check visible.</h3><p>Use the supported check-level boundary, while making entry direct and retaining the tips staff had already entered.</p><span class="option-outcome">Chosen direction</span></div></div>
+          <blockquote class="decision-quote">Save the entered tips.<br>Leave incomplete checks open.<br>Let staff continue.</blockquote>
+          <p>This kept the distinction between saved work and completed work clear. It did not magically sort the paper receipts: staff still needed to find the relevant payment.</p>
+        </section>
+
+        <section id="design" class="story-section" aria-labelledby="design-title">
+          <p class="overline">04 / The design</p><h2 id="design-title">Keep the context.<br>Remove the extra travel.</h2>
+          <p class="story-lead">The chosen design brought the check list and tip-entry area together. Staff could focus on an entry without leaving the surrounding check context.</p>
+          <figure class="motion-figure"><video data-motion-preview muted loop controls playsinline preload="none" poster="../presentation/assets/motion/closeout-chosen.jpg" width="800" height="464" aria-label="Tip-entry prototype walkthrough" aria-describedby="chosen-motion-caption"><source src="../presentation/assets/motion/closeout-chosen.mp4" type="video/mp4"><p>Your browser does not support this video. Use the original GIF below.</p></video><figcaption id="chosen-motion-caption"><span>Original recorded prototype: select a payment in the list, enter a tip in the adjacent keypad, and save the entry. This demonstrates the interface, not a live payment system.</span><a class="motion-original" href="../presentation/assets/motion/closeout-chosen.gif" download>Download the original GIF ↗</a></figcaption></figure>
+          <p class="motion-help">Silent animations play and loop while visible. Use the controls to pause or seek. With reduced motion enabled, press Play to start. The source's illustrated task path changed from 5–6 clicks across 4 pages to 2 clicks on 1 page; this is not a benchmark for every scenario.</p>
+          <div class="design-detail"><span class="detail-number">01</span><div><h3>Make the current task easy to see.</h3><p>A scannable list, familiar payment cues, and a dedicated entry area reduce visual competition.</p></div></div>
+          <div class="design-detail"><span class="detail-number">02</span><div><h3>Protect intent at the edges.</h3><p>Iteration addressed misleading default zero values, unsaved changes, and unusual-tip confirmation. An explicit zero-tip decision must remain distinct from missing information.</p></div></div>
+          <figure class="story-figure inset-figure"><a href="../presentation/assets/input-safeguards.png" data-lightbox aria-haspopup="dialog"><img src="../presentation/assets/input-safeguards.png" alt="Original tip-entry confirmation dialogs for an unconfirmed tip and an unusually high tip." width="352" height="200" loading="lazy"><span class="image-expand" aria-hidden="true">Expand ↗</span></a><figcaption>Original confirmation-state details from the iteration work.</figcaption></figure>
+          <figure class="motion-figure"><video data-motion-preview muted loop controls playsinline preload="none" poster="../presentation/assets/motion/closeout-refinement.jpg" width="800" height="464" aria-label="Check-selection prototype walkthrough" aria-describedby="refinement-motion-caption"><source src="../presentation/assets/motion/closeout-refinement.mp4" type="video/mp4"><p>Your browser does not support this video. Use the original GIF below.</p></video><figcaption id="refinement-motion-caption"><span>Original prototype showing check selection and the adjacent entry area. The recording is retained alongside the still confirmation-state details.</span><a class="motion-original" href="../presentation/assets/motion/closeout-refinement.gif" download>Download the original GIF ↗</a></figcaption></figure>
+          <div class="design-detail"><span class="detail-number">03</span><div><h3>Adapt the surface, preserve the rules.</h3><p>The delivery set included 15-inch and 10-inch terminal layouts, handhelds, light/dark themes, and empty/error states. The check/payment relationship remained the same.</p></div></div>
+          <figure class="motion-figure"><video data-motion-preview muted loop controls playsinline preload="none" poster="../presentation/assets/motion/closeout-terminal.jpg" width="800" height="464" aria-label="Terminal tip-entry walkthrough" aria-describedby="terminal-motion-caption"><source src="../presentation/assets/motion/closeout-terminal.mp4" type="video/mp4"><p>Your browser does not support this video. Use the original GIF below.</p></video><figcaption id="terminal-motion-caption"><span>Terminal prototype: payment context and the entry keypad share a landscape surface.</span><a class="motion-original" href="../presentation/assets/motion/closeout-terminal.gif" download>Download the original GIF ↗</a></figcaption></figure>
+          <figure class="motion-figure motion-figure--handheld"><video data-motion-preview muted loop controls playsinline preload="none" poster="../presentation/assets/motion/closeout-handheld.jpg" width="440" height="876" aria-label="Handheld tip-entry walkthrough" aria-describedby="handheld-motion-caption"><source src="../presentation/assets/motion/closeout-handheld.mp4" type="video/mp4"><p>Your browser does not support this video. Use the original GIF below.</p></video><figcaption id="handheld-motion-caption"><span>Handheld prototype: the same tip-entry task adapts to a narrow screen, with the keypad opening below the selected payment.</span><a class="motion-original" href="../presentation/assets/motion/closeout-handheld.gif" download>Download the original GIF ↗</a></figcaption></figure>
+        </section>
+
+        <section id="outcomes" class="story-section" aria-labelledby="outcomes-title">
+          <p class="overline">05 / Directional trial outcomes</p><h2 id="outcomes-title">A promising signal,<br>with limits to the evidence.</h2>
+          <div class="web-metrics"><div><strong>~50<span>%</span></strong><p>shorter closeout time</p><span class="caption">Approximate trial estimate</span></div><div><strong>~5<span>%</span></strong><p>fewer support tickets</p><span class="caption">Approximate trial estimate</span></div></div>
+          <div class="evidence-disclosure"><strong>How to read these numbers</strong><p>The original portfolio describes a bar-and-lounge trial. These figures are directional estimates, not independently verified measurements. The precise metric definitions, denominators, and comparison methodology still need confirmation. They do not establish causality or results across all restaurants.</p></div>
+        </section>
+
+        <section id="reflection" class="story-section" aria-labelledby="reflection-title">
+          <p class="overline">06 / Reflection</p><h2 id="reflection-title">Preserve progress.<br>Keep incomplete work visible.</h2>
+          <p class="story-lead">The design decision was to work with the real closure boundary, while giving people a way to continue when information was missing.</p>
+          <p>Future opportunities in the original case included other bulk actions, such as void and reopen, and further discovery around service types and permissions. Those were opportunities, not delivered scope.</p>
+          <div class="reflection-note"><p class="overline">Retrospective discussion points</p><p>What would I validate earlier? The unit of completion with engineering, and an outcome measurement plan with clearly defined tasks and trial cohorts.</p><p class="caption">Proposed present-day reflection for review, not a claim about historical project activities.</p></div>
+          <a class="button button-dark" href="../presentation/">Explore the full presentation <span aria-hidden="true">↗</span></a>
+          <details class="source-details"><summary>Sources and scope notes</summary><p>Adapted from the user-provided Figma portfolio and the presenter's clarifications. The project role was senior product designer. Source links may require Figma access.</p><ul><li><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=1-623" target="_blank" rel="noopener noreferrer">Responsibility and collaboration</a></li><li><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=1-943" target="_blank" rel="noopener noreferrer">System-conflict exploration</a></li><li><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=1-873" target="_blank" rel="noopener noreferrer">Original impact and next steps</a></li></ul><p>This is a local draft. Public-sharing permissions and outcome definitions should be confirmed before publication.</p></details>
+        </section>
+      </div>
+    </div>
+    <section class="case-end wrap"><p class="overline">Thanks for reading</p><h2>There’s more behind<br><span class="serif-word">every decision.</span></h2><div><a class="text-link" href="mailto:schen9401@gmail.com">Let’s talk about the work ↗</a><a class="text-link" href="../index.html#work">Back to selected work ↑</a></div></section>
+  </main>
+  <footer class="site-footer wrap"><span>Siyi Chen · Product design</span><span>Local portfolio draft · Not published</span><a href="#main">Back to top ↑</a></footer>
+  <dialog class="image-dialog" aria-labelledby="image-dialog-title" aria-describedby="image-dialog-caption"><div class="dialog-toolbar"><h2 id="image-dialog-title">Design detail</h2><button class="dialog-close" type="button" aria-label="Close image">Close <span aria-hidden="true">×</span></button></div><img class="dialog-image" alt="Expanded product design detail"><p class="dialog-caption" id="image-dialog-caption"></p></dialog>
+</body>
+</html>

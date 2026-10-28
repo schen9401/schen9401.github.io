@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Toast Cash Drawer 2.0: clearer drawer states, task-prioritized actions, and cash-management walkthroughs. A product design case study by Siyi Chen.">
+  <meta name="theme-color" content="#f5f4ef">
+  <title>Cash management, without the guesswork — Siyi Chen</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../site.js" defer></script>
+  <script src="../presentation/motion.js" defer></script>
+</head>
+<body class="case-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header wrap"><a class="wordmark" href="../index.html" aria-label="Siyi Chen, home">Siyi Chen<span class="wordmark-dot" aria-hidden="true"></span></a><nav aria-label="Main navigation"><a href="../index.html#work">All work</a><a href="../presentations/">Presentations</a><a href="../index.html#resume">Résumé</a></nav></header>
+  <main id="main">
+    <section class="case-hero wrap" aria-labelledby="case-title">
+      <div class="case-kicker"><span class="project-brand">Toast</span><span class="overline">Cash Drawer 2.0 · H2 2023</span></div>
+      <h1 id="case-title">Cash management,<br>without the <span class="serif-word">guesswork.</span></h1>
+      <p class="case-summary">Making drawer states, everyday actions, and the restaurant-wide picture easier to understand.</p>
+      <dl class="case-facts"><div><dt>Work</dt><dd>Product &amp; interaction design</dd></div><div><dt>Context</dt><dd>Connected restaurant hardware</dd></div><div><dt>Platform</dt><dd>Android tablets &amp; Toast Go</dd></div><div><dt>Focus</dt><dd>Clarity &amp; task hierarchy</dd></div></dl>
+      <figure class="case-hero-visual case-hero-visual--screen"><img src="../assets/work/cash-drawer-overview.png" alt="Redesigned Toast cash-drawer list with active drawer states and a restaurant-wide activity summary panel." width="1920" height="1080" fetchpriority="high"><figcaption>Original Cash Drawer 2.0 overview design.</figcaption></figure>
+    </section>
+    <div class="case-body wrap">
+      <aside class="case-contents" aria-label="Case-study contents"><p class="overline">In this case</p><nav aria-label="Case-study sections"><a href="#context">01 Context</a><a href="#overview">02 The overview</a><a href="#workflows">03 Everyday actions</a><a href="#delivery">04 Delivery &amp; scope</a></nav></aside>
+      <div class="case-narrative">
+        <section id="context" class="story-section" aria-labelledby="context-title">
+          <p class="overline">01 / Context</p><h2 id="context-title">A cash drawer is more<br>than a balance.</h2>
+          <p class="story-lead">Staff need to understand which drawer they are working with, what has happened to its cash, and what they can do next.</p>
+          <p>The redesign brought together three related jobs: understanding drawer status, acting on a drawer, and reviewing activity across the restaurant. My work focused on the product and interaction design of that experience.</p>
+          <div class="editorial-note"><span class="overline">Design focus</span><p>Use clear labels, simplify the hierarchy, and put the most important jobs where people can find them.</p></div>
+          <figure class="story-figure"><a href="../assets/work/cash-drawer-legacy.png" data-lightbox><img src="../assets/work/cash-drawer-legacy.png" alt="Legacy Toast cash-drawer list before the redesigned state hierarchy and restaurant-wide summary." width="1920" height="1080" loading="lazy"><span class="image-expand" aria-hidden="true">Expand ↗</span></a><figcaption>The legacy drawer list, retained for comparison with the redesigned overview above.</figcaption></figure>
+        </section>
+        <section id="overview" class="story-section" aria-labelledby="overview-title">
+          <p class="overline">02 / The overview</p><h2 id="overview-title">See the drawer.<br>Keep the bigger picture.</h2>
+          <p class="story-lead">The new list simplified the hierarchy of drawer states and paired it with a side panel summarizing activity across the restaurant.</p>
+          <p>Clearer labels and actions reduced reliance on jargon. Instead of making the whole screen compete for attention, the overview separated the drawer list from the broader activity context.</p>
+          <div class="design-detail"><span class="detail-number">01</span><div><h3>Make status understandable.</h3><p>A simpler hierarchy gives each drawer state a clearer place in the list.</p></div></div>
+          <div class="design-detail"><span class="detail-number">02</span><div><h3>Keep activity visible.</h3><p>The restaurant-wide panel provides context alongside the drawers, rather than hiding that information inside an individual drawer.</p></div></div>
+        </section>
+        <section id="workflows" class="story-section" aria-labelledby="workflows-title">
+          <p class="overline">03 / Everyday actions</p><h2 id="workflows-title">Prioritize the job.<br>Explain the transaction.</h2>
+          <p class="story-lead">Add and Remove cash came before No sale in the task hierarchy. Past cash activity remained a read-only history, separate from the actions that change a drawer.</p>
+          <p>The Add, Remove, and Close flows used direct actions and an informative side panel. Amount, comment, and an associated server, when applicable, gave each entry useful context.</p>
+          <figure class="motion-figure"><video data-motion-preview muted loop controls playsinline preload="none" poster="../assets/motion/cash-drawer-add-cash.jpg" width="1920" height="1080" aria-label="Adding cash to a Toast drawer" aria-describedby="add-cash-caption"><source src="../assets/motion/cash-drawer-add-cash.mp4" type="video/mp4"><p>Your browser does not support this video. Use the original GIF below.</p></video><figcaption id="add-cash-caption"><span>Original Add cash walkthrough: choose an associated server, enter the amount, and retain the transaction context in the side panel. Remove cash followed a similar source workflow.</span><a class="motion-original" href="../assets/motion/cash-drawer-add-cash.gif" download>Download the original GIF ↗</a></figcaption></figure>
+          <p class="motion-help">Silent original recordings play and loop while visible. Use the controls to pause or seek. Reduced-motion preferences disable automatic playback.</p>
+          <figure class="motion-figure"><video data-motion-preview muted loop controls playsinline preload="none" poster="../assets/motion/cash-drawer-close.jpg" width="800" height="450" aria-label="Closing a Toast cash drawer" aria-describedby="close-drawer-caption"><source src="../assets/motion/cash-drawer-close.mp4" type="video/mp4"><p>Your browser does not support this video. Use the original GIF below.</p></video><figcaption id="close-drawer-caption"><span>Original Close drawer walkthrough: move from the active drawer into cash-count entry while the drawer context remains visible.</span><a class="motion-original" href="../assets/motion/cash-drawer-close.gif" download>Download the original GIF ↗</a></figcaption></figure>
+          <p>Closed-drawer activity reports could be printed, connecting the on-screen history to the restaurant’s physical closeout work.</p>
+        </section>
+        <section id="delivery" class="story-section" aria-labelledby="delivery-title">
+          <p class="overline">04 / Delivery &amp; scope</p><h2 id="delivery-title">One structure.<br>Different service surfaces.</h2>
+          <p>The source design set covered FLEX 15-inch and 10-inch layouts, Toast Go, and light and dark themes. The common thread was a clear task hierarchy and an understandable record of cash activity.</p>
+          <div class="evidence-disclosure"><strong>What the source establishes</strong><p>The portfolio documents interface changes and device coverage. It does not provide a quantified outcome study for this project, so this case makes no claims about time savings, error reductions, or rollout results.</p></div>
+          <details class="source-details"><summary>Sources and scope notes</summary><p>Adapted from the original Cash Drawer 2.0 design sequence, dated H2 2023. The animations are the original GIFs, converted locally to controllable silent videos; original files remain available above.</p><ul><li><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=10-1606" target="_blank" rel="noopener noreferrer">Drawer overview and state hierarchy</a></li><li><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=10-1621" target="_blank" rel="noopener noreferrer">Task prioritization and activity history</a></li><li><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=10-1636" target="_blank" rel="noopener noreferrer">Add, Remove, and Close workflows</a></li></ul><p>Source links may require Figma access. This local editorial draft needs content and public-sharing review before publication.</p></details>
+        </section>
+      </div>
+    </div>
+    <section class="case-end wrap"><p class="overline">Next case / Toast</p><h2>A clearer close<br>to a <span class="serif-word">long shift.</span></h2><div><a class="text-link" href="toast-closeout.html">Read the closeout case study ↗</a><a class="text-link" href="../index.html#work">All selected work ↑</a></div></section>
+  </main>
+  <footer class="site-footer wrap"><span>Siyi Chen · Product design</span><span>Local portfolio draft · Not published</span><a href="#main">Back to top ↑</a></footer>
+  <dialog class="image-dialog" aria-labelledby="image-dialog-title" aria-describedby="image-dialog-caption"><div class="dialog-toolbar"><h2 id="image-dialog-title">Design detail</h2><button class="dialog-close" type="button" aria-label="Close image">Close <span aria-hidden="true">×</span></button></div><img class="dialog-image" alt="Expanded product design detail"><p class="dialog-caption" id="image-dialog-caption"></p></dialog>
+</body>
+</html>

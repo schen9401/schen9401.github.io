@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Toast restaurant closeout: a product design case study about payment entry, check-level closure, and preserving progress.">
+  <title>Rethinking restaurant closeout — Siyi Chen</title>
+  <link rel="stylesheet" href="deck.css">
+  <link rel="stylesheet" href="presentation.css">
+  <link rel="stylesheet" href="motion.css">
+  <script src="engine.js" defer></script>
+  <script src="deck-accessibility.js" defer></script>
+  <script src="motion.js" defer></script>
+</head>
+<!-- Toast-only working draft. Autopilot build from PRESENTATION.md; editorial copy remains reviewable.
+     20 core slides, 3 backups, 25–30 minutes. Historical role: senior product designer.
+     Outcomes are directional estimates. No claim of principal title. -->
+<body data-brand="neutral" data-mode="light" data-shell="rehearsal" data-edit="false">
+  <main class="stage" id="stage" aria-label="Toast closeout presentation">
+    <div class="stage-area">
+      <div class="deck" id="deck">
+
+        <!-- === OPENING === -->
+        <section class="slide slide--title is-active" data-section="Opening" data-motion="fade-blur" aria-labelledby="title-1">
+          <div class="cover-grid">
+            <div class="cover-copy">
+              <p class="eyebrow reveal" style="--i:0">Toast · Product design case study · 2024</p>
+              <h1 class="hero-title reveal" style="--i:1" id="title-1">Rethinking<br>restaurant<br><span class="accent">closeout.</span></h1>
+              <p class="cover-deck reveal" style="--i:2">Make end-of-day work faster.<br>Keep incomplete work visible.</p>
+              <p class="byline reveal" style="--i:3">Siyi Chen <span>Senior product designer at the time</span></p>
+            </div>
+            <div class="cover-visual reveal" style="--i:2">
+              <div class="cover-number" aria-hidden="true">01</div>
+              <video data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-chosen.jpg" width="800" height="464" aria-label="Animated Toast tip-entry prototype" aria-describedby="cover-motion-caption"><source src="assets/motion/closeout-chosen.mp4" type="video/mp4"></video>
+              <p class="image-label" id="cover-motion-caption">Original animated prototype · Toast POS</p>
+            </div>
+          </div>
+          <aside class="speaker-notes" hidden>30 seconds. Introduce this as a project completed as a senior product designer. The story is the choice of workflow model, not a claim that I changed the payment architecture. The original source frames this work in Q1 2024.</aside>
+        </section>
+
+        <section class="slide slide--contentPrototype" data-section="The task" data-motion="rise" aria-labelledby="title-2">
+          <p class="eyebrow reveal" style="--i:0">Context</p>
+          <h2 id="title-2" class="reveal" style="--i:1">Service ends.<br>The work does not.</h2>
+          <div class="two-col grow">
+            <div class="copy reveal" style="--i:2">
+              <p class="lead">Before a restaurant can close out, staff still need to find payments, enter handwritten tips, and resolve the remaining checks.</p>
+              <div class="ruled-note"><strong>The design task</strong><p>Reduce repeated navigation and entry effort without letting incomplete checks disappear.</p></div>
+            </div>
+            <figure class="media-stage reveal" style="--i:3">
+              <img src="assets/legacy-closeout.png" alt="Legacy Toast screen with check tiles and a separate set of check actions." width="720" height="407">
+              <figcaption>The legacy check workflow</figcaption>
+            </figure>
+          </div>
+          <p class="source">Source: original Toast case, problem and workflow slides.</p>
+          <aside class="speaker-notes" hidden>1 minute. Establish the closing task, especially for bars and lounges in the source portfolio. Do not equate every restaurant workflow with this example. The business concern in the source was support demand, alongside staff effort.</aside>
+        </section>
+
+        <section class="slide slide--content" data-section="My role" data-motion="drift-left" aria-labelledby="title-3">
+          <p class="eyebrow reveal" style="--i:0">Ownership &amp; partnership</p>
+          <h2 id="title-3" class="reveal" style="--i:1">I owned the<br>solution direction.</h2>
+          <div class="two-col grow align-start">
+            <div class="copy reveal" style="--i:2">
+              <p class="lead">I explored two versions of the experience and worked through their feasibility with product management and engineering.</p>
+              <p class="role-label">Historical role <strong>Senior product designer</strong></p>
+            </div>
+            <div class="scope-list reveal" style="--i:3">
+              <div><span>Framing</span><p>Planning, discovery, and scope</p></div>
+              <div><span>Design</span><p>Workflow, prototypes, and visual design</p></div>
+              <div><span>Delivery</span><p>Validation, handoff, and development follow-ups</p></div>
+              <p class="small">Documented project scope. Product and engineering were partners in the decision, not teams I managed.</p>
+            </div>
+          </div>
+          <p class="source">Source: original responsibility slide; ownership clarified in conversation.</p>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. Separate my design-direction ownership from the team's product and technical decisions. The source also names the Close team, Payments, POS design, and POS leadership as collaboration surfaces. Do not imply I managed those groups or owned an organization-wide strategy.</aside>
+        </section>
+
+        <section class="slide slide--journey" data-section="The workflow" data-motion="drift-right" aria-labelledby="title-4">
+          <p class="eyebrow reveal" style="--i:0">Problem</p>
+          <h2 id="title-4" class="reveal" style="--i:1">One task, too much<br>back-and-forth.</h2>
+          <div class="sequence grow">
+            <div class="sequence-step reveal" style="--i:2"><span class="step-index">01</span><h3>Find</h3><p>Match a paper receipt to the right payment.</p></div>
+            <div class="sequence-step reveal" style="--i:3"><span class="step-index">02</span><h3>Enter</h3><p>Add the tip and retain the entered information.</p></div>
+            <div class="sequence-step reveal" style="--i:4"><span class="step-index">03</span><h3>Resolve</h3><p>Close the check only when its payments are complete.</p></div>
+          </div>
+          <p class="takeaway reveal" style="--i:5">The product needed to connect these steps without hiding what was still missing.</p>
+          <p class="source">Source: original problem and journey slides; clarified closure behavior.</p>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. Walk through the task rather than listing design-process stages. The three steps simplify the source journey for explanation; they are not a quantified observational study.</aside>
+        </section>
+
+        <section class="slide slide--diagram" data-section="The system model" data-motion="zoom-in" aria-labelledby="title-5">
+          <p class="eyebrow reveal" style="--i:0">The constraint behind the interface</p>
+          <h2 id="title-5" class="reveal" style="--i:1">Tips belong to payments.<br>Closure belongs to checks.</h2>
+          <div class="system-model grow reveal" style="--i:2">
+            <div class="check-node"><span class="small-label">Unit of closure</span><strong>One check</strong><span class="status status-waiting">Open</span></div>
+            <div class="model-connector" aria-hidden="true"></div>
+            <div class="payment-nodes">
+              <div class="payment-node"><span>Payment A</span><strong>Tip entered</strong><span class="status status-complete">Complete</span></div>
+              <div class="payment-node missing"><span>Payment B</span><strong>Tip information missing</strong><span class="status status-waiting">Incomplete</span></div>
+              <div class="payment-node"><span>Payment C</span><strong>Tip entered</strong><span class="status status-complete">Complete</span></div>
+            </div>
+          </div>
+          <p class="takeaway reveal" style="--i:3">One incomplete payment keeps the entire check open.</p>
+          <p class="source">Illustrative model, based on the presenter's clarification. Not a Toast interface.</p>
+          <aside class="speaker-notes" hidden>2 minutes. Explain the distinction carefully. A check can have multiple payments because guests split the bill. Tip information lives on each payment. There is no independent payment-level close action. Completeness does not mean a positive tip: an explicitly confirmed zero tip must remain distinct from missing information.</aside>
+        </section>
+
+        <section class="slide slide--contentPrototype" data-section="Real-world conditions" data-motion="zoom-out" aria-labelledby="title-6">
+          <p class="eyebrow reveal" style="--i:0">The human workflow</p>
+          <h2 id="title-6" class="reveal" style="--i:1">The receipts do not<br>arrive in check order.</h2>
+          <div class="two-col grow">
+            <div class="receipt-stack reveal" style="--i:2" aria-label="Illustrative unordered receipts: check 42 payment A, check 17 payment A, check 42 payment B.">
+              <div class="receipt"><span>Illustrative receipt</span><strong>Check 42</strong><p>Payment A · Tip entered</p></div>
+              <div class="receipt"><span>Illustrative receipt</span><strong>Check 17</strong><p>Payment A · Tip entered</p></div>
+              <div class="receipt"><span>Illustrative receipt</span><strong>Check 42</strong><p>Payment B · Still to find</p></div>
+            </div>
+            <div class="copy reveal" style="--i:3">
+              <p class="lead">A pile of paper receipts follows neither the check hierarchy nor the order of the screen.</p>
+              <p>Finishing one receipt does not tell staff whether every payment on that check is ready to close.</p>
+            </div>
+          </div>
+          <p class="source">Source: presenter's description of unordered paper tips. Receipt examples are explanatory.</p>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. This is why a payment-first workflow was appealing. Do not portray it as a foolish initial idea: it responded to how staff handled receipts. The challenge was preserving that entry efficiency while respecting check-level completeness.</aside>
+        </section>
+
+        <section class="slide slide--principles" data-section="Design criteria" data-motion="depth" aria-labelledby="title-7">
+          <p class="eyebrow reveal" style="--i:0">Decision criteria</p>
+          <h2 id="title-7" class="reveal" style="--i:1">Accuracy and progress<br>had to work together.</h2>
+          <div class="principle-list grow">
+            <div class="reveal" style="--i:2"><span>01</span><h3>Find the right payment</h3><p>Make receipt-to-payment matching easier.</p></div>
+            <div class="reveal" style="--i:3"><span>02</span><h3>Expose completeness</h3><p>Show why a check is or is not ready to close.</p></div>
+            <div class="reveal" style="--i:4"><span>03</span><h3>Retain entered work</h3><p>Let staff move forward without losing progress.</p></div>
+          </div>
+          <p class="source">Editorial synthesis of the source's accuracy, efficiency, and user-control goals.</p>
+          <aside class="speaker-notes" hidden>1 minute. These criteria summarize the evidence for this presentation. They are not a claim that this exact rubric was documented during the project. Use them to explain the tradeoff between the two versions.</aside>
+        </section>
+
+        <section class="slide slide--comparison" data-section="Two versions" data-motion="fade-blur" aria-labelledby="title-8">
+          <p class="eyebrow reveal" style="--i:0">Exploration</p>
+          <h2 id="title-8" class="reveal" style="--i:1">Two versions.<br>Different units of work.</h2>
+          <div class="comparison-grid grow">
+            <div class="comparison-panel reveal" style="--i:2"><p class="small-label">Version A</p><h3>Payment-first</h3><div class="mini-flow"><span>Find payment</span><b aria-hidden="true">→</b><span>Enter tip</span><b aria-hidden="true">→</b><span class="unsupported">Bulk closure?</span></div><p>Fits receipt-by-receipt entry. Completion becomes ambiguous when sibling payments are missing.</p></div>
+            <div class="comparison-panel selected reveal" style="--i:3"><p class="small-label">Version B</p><h3>Check-centered</h3><div class="mini-flow"><span>Find check</span><b aria-hidden="true">→</b><span>Enter tips</span><b aria-hidden="true">→</b><span>Resolve check</span></div><p>Keeps the closure boundary visible. Staff still need to locate the relevant payment.</p></div>
+          </div>
+          <p class="source">Source: two design versions confirmed by the presenter; original exploration slides. Not an A/B experiment.</p>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. Present the two interaction models, not merely two visual treatments. The question mark marks the unsupported closing action in the first version. Keep the remaining receipt-matching effort explicit in the chosen approach.</aside>
+        </section>
+
+        <section class="slide slide--decision" data-section="Feasibility review" data-motion="rise" aria-labelledby="title-9">
+          <p class="eyebrow reveal" style="--i:0">Review with product &amp; engineering</p>
+          <h2 id="title-9" class="reveal" style="--i:1">We could enter by payment.<br>We could not close by payment.</h2>
+          <div class="decision-grid grow">
+            <div class="decision-callout reveal" style="--i:2"><span class="small-label">The blocked assumption</span><p>A completed payment could be treated as an independently closable item.</p></div>
+            <div class="copy reveal" style="--i:3"><p class="lead">The system could close only the whole check, once every payment had the required information.</p><p>PM and engineering review ruled out the payment-level closing direction. The design needed a compatible model for progress.</p></div>
+          </div>
+          <p class="source">Source: presenter's account of the constraint and PM/engineering review.</p>
+          <aside class="speaker-notes" hidden>2 minutes. This is the central decision in the case. Say that engineering and PM review exposed the limitation; do not claim I independently discovered it or persuaded executives to change the architecture. Explain why the version was blocked and how that narrowed the solution space.</aside>
+        </section>
+
+        <section class="slide slide--contentPrototype" data-section="Chosen direction" data-motion="drift-left" aria-labelledby="title-10">
+          <p class="eyebrow reveal" style="--i:0">Chosen direction</p>
+          <h2 id="title-10" class="reveal" style="--i:1">Keep the check in view.<br>Make tip entry direct.</h2>
+          <div class="visual-layout grow">
+            <figure class="media-stage reveal" style="--i:2"><video data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-chosen.jpg" width="800" height="464" aria-label="Original Toast tip-entry prototype walkthrough" aria-describedby="chosen-demo-caption"><source src="assets/motion/closeout-chosen.mp4" type="video/mp4"><p>Use a current browser to play this walkthrough.</p></video><figcaption id="chosen-demo-caption">Silent, looping · Select a payment, enter a tip, and save · Original prototype</figcaption></figure>
+            <div class="annotation-list reveal" style="--i:3"><div><strong>Locate</strong><p>Find the check and its payment information.</p></div><div><strong>Enter</strong><p>Edit the tip without navigating away.</p></div><div><strong>Resolve</strong><p>Use the check's completeness to govern closure.</p></div></div>
+          </div>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. Walk through the original screen. The panel supports focused entry while the list preserves context. This is an original design screenshot, not a newly rebuilt or connected point-of-sale application.</aside>
+        </section>
+
+        <section class="slide slide--diagram" data-section="Recovery behavior" data-motion="drift-right" aria-labelledby="title-11">
+          <p class="eyebrow reveal" style="--i:0">Progress is not the same as closure</p>
+          <h2 id="title-11" class="reveal" style="--i:1">Incomplete check.<br>Saved progress.</h2>
+          <div class="recovery-flow grow reveal" style="--i:2">
+            <div class="flow-root"><strong>Tip information entered</strong><p>Check all payments on the check.</p></div>
+            <div class="recovery-branches">
+              <div class="branch"><span class="status status-complete">All complete</span><h3>Close the check</h3><p>The check is eligible for closure.</p></div>
+              <div class="branch chosen"><span class="status status-waiting">Information missing</span><h3>Save and continue</h3><p>Retain entered tips. Leave the check open. Move to another check.</p></div>
+            </div>
+          </div>
+          <p class="source">Confirmed behavior. Diagram labels explain the model; they are not exact Toast button labels.</p>
+          <aside class="speaker-notes" hidden>1 minute 45 seconds. The presenter confirmed the second branch: save the entered tips, leave the check open, and continue elsewhere. The check is not falsely marked complete, and staff are not forced to finish every payment before moving on.</aside>
+        </section>
+
+        <section class="slide slide--contentPrototype" data-section="Validation and refinement" data-motion="zoom-in" aria-labelledby="title-12">
+          <p class="eyebrow reveal" style="--i:0">Validation &amp; refinement</p>
+          <h2 id="title-12" class="reveal" style="--i:1">Make intent explicit<br>before it becomes an error.</h2>
+          <div class="two-col grow">
+            <div class="copy reveal" style="--i:2"><p class="lead">A default zero could look like a completed decision. Moving away could leave an edit unresolved.</p><div class="ruled-note"><strong>The refinements</strong><p>Make zero-tip entry deliberate, protect unsaved changes, and confirm unusual tips.</p></div></div>
+            <figure class="media-stage detail-stage reveal" style="--i:3"><img src="assets/input-safeguards.png" alt="Original confirmation dialogs for leaving a payment without a confirmed tip and for an unusually high tip." width="352" height="200"><figcaption>Source design details · confirmation states</figcaption></figure>
+          </div>
+          <p class="source">Source: original iteration slide. No test sample size or quantified task-success result is supplied.</p>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. Discuss findings and changes without inventing research participant counts. An explicit zero tip is valid; missing information is a separate state. The original slide also documents a focus mode for zero-tip closure.</aside>
+        </section>
+
+        <section class="slide slide--comparison" data-section="Workflow comparison" data-motion="zoom-out" aria-labelledby="title-13">
+          <p class="eyebrow reveal" style="--i:0">Interaction comparison</p>
+          <h2 id="title-13" class="reveal" style="--i:1">Bring the task<br>onto one page.</h2>
+          <div class="comparison-grid image-comparison grow">
+            <figure class="reveal" style="--i:2"><img src="assets/legacy-closeout.png" alt="Legacy check interface requiring movement between different task screens." width="720" height="407"><figcaption><strong>Legacy task path</strong><span>5–6 clicks · 4 pages</span></figcaption></figure>
+            <figure class="reveal" style="--i:3"><img src="assets/check-closeout.png" alt="Redesigned tip-entry and closure workflow on one screen." width="800" height="464"><figcaption><strong>Redesigned task path</strong><span>2 clicks · 1 page</span></figcaption></figure>
+          </div>
+          <p class="source">Counts describe the task path illustrated in the original comparison, not every closeout scenario.</p>
+          <aside class="speaker-notes" hidden>1 minute 15 seconds. The source slide compares a specific workflow. Do not generalize its click count into a benchmark for all staff or all checks. Keep the claim about less navigation concrete and bounded.</aside>
+        </section>
+
+        <section class="slide slide--contentPrototype" data-section="Visual hierarchy" data-motion="depth" aria-labelledby="title-14">
+          <p class="eyebrow reveal" style="--i:0">Information hierarchy</p>
+          <h2 id="title-14" class="reveal" style="--i:1">Make the important<br>differences visible.</h2>
+          <div class="visual-layout grow">
+            <figure class="media-stage reveal" style="--i:2"><video data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-refinement.jpg" width="800" height="464" aria-label="Original Toast check-selection prototype" aria-describedby="selection-demo-caption"><source src="assets/motion/closeout-refinement.mp4" type="video/mp4"><p>Use a current browser to play this walkthrough.</p></video><figcaption id="selection-demo-caption">Silent, looping · Check selection beside the entry area · Original prototype</figcaption></figure>
+            <div class="annotation-list reveal" style="--i:3"><div><strong>Group related information</strong><p>Keep payment details legible within their check context.</p></div><div><strong>Differentiate states</strong><p>Separate the current entry task from the rest of the list.</p></div><div><strong>Support scanning</strong><p>Use aligned columns and familiar payment cues.</p></div></div>
+          </div>
+          <p class="source">Source: original readability comparison and chosen design. No measured findability lift claimed.</p>
+          <aside class="speaker-notes" hidden>1 minute. The source describes grouping, size contrast, and a scannable table. Explain the visual decisions using the actual screen, without inventing accessibility or usability test scores.</aside>
+        </section>
+
+        <section class="slide slide--contentPrototype" data-section="Across devices" data-motion="fade-blur" aria-labelledby="title-15">
+          <p class="eyebrow reveal" style="--i:0">Delivery</p>
+          <h2 id="title-15" class="reveal" style="--i:1">Same closure rules.<br>Different working surfaces.</h2>
+          <div class="visual-layout grow">
+            <figure class="media-stage device-stage reveal" style="--i:2"><div class="device-walkthroughs"><video data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-terminal.jpg" width="800" height="464" aria-label="Original terminal tip-entry walkthrough" aria-describedby="devices-demo-caption"><source src="assets/motion/closeout-terminal.mp4" type="video/mp4"><p>Use a current browser to play this walkthrough.</p></video><video data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-handheld.jpg" width="440" height="876" aria-label="Original handheld tip-entry walkthrough" aria-describedby="devices-demo-caption"><source src="assets/motion/closeout-handheld.mp4" type="video/mp4"><p>Use a current browser to play this walkthrough.</p></video></div><figcaption id="devices-demo-caption">Silent, looping · Terminal and handheld tip entry · Original prototypes</figcaption></figure>
+            <div class="copy reveal" style="--i:3"><p class="lead">Adapt the layout and entry interaction to the device, while preserving the check/payment model.</p><p>The delivery set included 15-inch and 10-inch terminals, handheld layouts, light and dark themes, and empty/error states.</p></div>
+          </div>
+          <p class="source">Source: original device overview and dev-ready delivery slides.</p>
+          <aside class="speaker-notes" hidden>1 minute. Explain device and state coverage as documented handoff work, not an assertion that every variation was broadly rolled out. The original source identifies Android patterns for POS 3.0.</aside>
+        </section>
+
+        <section class="slide slide--content" data-section="Directional outcomes" data-motion="rise" aria-labelledby="title-16">
+          <p class="eyebrow reveal" style="--i:0">Trial outcomes · directional estimates</p>
+          <h2 id="title-16" class="reveal" style="--i:1">The trial pointed<br>in the right direction.</h2>
+          <div class="metric-grid grow">
+            <div class="metric reveal" style="--i:2"><strong>~50<span>%</span></strong><p>shorter closeout time</p><span class="metric-caveat">Approximate trial estimate</span></div>
+            <div class="metric reveal" style="--i:3"><strong>~5<span>%</span></strong><p>fewer support tickets</p><span class="metric-caveat">Approximate trial estimate</span></div>
+          </div>
+          <p class="evidence-caveat reveal" style="--i:4">The original case describes a bar-and-lounge trial. These figures are directional, not independently verified measurements or proof of causality.</p>
+          <p class="source">Source: original impact slide; confidence qualified by the presenter. Unexplained sample-size figure omitted.</p>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. Describe these as approximate or directional. The source mentions a two-month bar-and-lounge period for the support finding, but the metric definitions and denominators are not supplied. Do not imply an audited experiment, company-wide savings, or a result across all restaurants.</aside>
+        </section>
+
+        <section class="slide slide--content" data-section="Scope and opportunity" data-motion="drift-left" aria-labelledby="title-17">
+          <p class="eyebrow reveal" style="--i:0">Scope</p>
+          <h2 id="title-17" class="reveal" style="--i:1">A reusable idea.<br>A bounded delivery.</h2>
+          <div class="comparison-grid grow">
+            <div class="comparison-panel reveal" style="--i:2"><p class="small-label">This project</p><h3>Tip entry and<br>check closure</h3><p>A check-centered model, retained input, and layouts for the relevant POS surfaces.</p></div>
+            <div class="comparison-panel reveal" style="--i:3"><p class="small-label">Future opportunities in the source</p><h3>Other bulk<br>operations</h3><p>Explore void, reopen, and additional service or permission needs. These are opportunities, not delivered scope.</p></div>
+          </div>
+          <p class="source">Source: original delivery and “what's next” sections. Broader rollout is not established.</p>
+          <aside class="speaker-notes" hidden>1 minute. Show that the decision can inform future questions without claiming that it became a platform-wide pattern. The source lists potential future bulk uses and service/permission-based discovery.</aside>
+        </section>
+
+        <section class="slide slide--content" data-section="Retrospective" data-motion="drift-right" aria-labelledby="title-18">
+          <p class="eyebrow reveal" style="--i:0">Retrospective · proposed discussion points</p>
+          <h2 id="title-18" class="reveal" style="--i:1">What I would<br>validate earlier.</h2>
+          <div class="comparison-grid grow">
+            <div class="comparison-panel reveal" style="--i:2"><p class="small-label">Feasibility</p><h3>The unit<br>of completion</h3><p>Make the check/payment boundary explicit in early design and engineering conversations.</p></div>
+            <div class="comparison-panel reveal" style="--i:3"><p class="small-label">Evidence</p><h3>The measurement<br>plan</h3><p>Define task time, support-ticket categories, trial cohort, and comparison period before assessing outcomes.</p></div>
+          </div>
+          <p class="source">Present-day reflection proposed for review. Not a claim that these actions were performed historically.</p>
+          <aside class="speaker-notes" hidden>1 minute 30 seconds. These are proposed retrospective talking points. Review them before interviewing and replace them with your own reflection if needed. They connect the feasibility lesson with honest limits in the outcome evidence.</aside>
+        </section>
+
+        <section class="slide slide--closing" data-section="The design decision" data-motion="zoom-in" aria-labelledby="title-19">
+          <p class="eyebrow reveal" style="--i:0">The decision I would carry forward</p>
+          <div class="closing-content grow"><h2 id="title-19" class="closing-title reveal" style="--i:1">Preserve progress.<br>Keep incomplete<br>work <span class="accent">visible.</span></h2><p class="lead reveal" style="--i:2">Respect the system's completion boundary without forcing the user to stop working.</p></div>
+          <aside class="speaker-notes" hidden>1 minute. Return to the exact decision rather than a generic design philosophy. The design retained tip-entry progress and allowed the staff member to continue, while leaving incomplete checks open.</aside>
+        </section>
+
+        <section class="slide slide--closing" data-section="Discussion" data-motion="zoom-out" aria-labelledby="title-20">
+          <p class="eyebrow reveal" style="--i:0">Toast closeout</p>
+          <div class="closing-content grow"><h2 id="title-20" class="closing-title reveal" style="--i:1">Let's discuss<br>the <span class="accent">tradeoffs.</span></h2><p class="lead reveal" style="--i:2">The alternatives. The system constraint.<br>The limits of the evidence.</p></div>
+          <p class="byline">Siyi Chen · Product design</p>
+          <aside class="speaker-notes" hidden>End of the core presentation. The following three slides are backup evidence, not additional core talk time.</aside>
+        </section>
+
+        <!-- === BACKUP === -->
+        <section class="slide slide--appendix" data-section="Backup: evidence" data-motion="depth" aria-labelledby="title-21">
+          <p class="eyebrow reveal" style="--i:0">Backup · evidence and confidence</p>
+          <h2 id="title-21" class="reveal" style="--i:1">What is supported.<br>What still needs verification.</h2>
+          <div class="evidence-list grow reveal" style="--i:2">
+            <div><strong>Confirmed by the presenter</strong><p>Senior role; solution-direction ownership; two versions; PM/engineering review; check-level closure; save-and-continue behavior.</p></div>
+            <div><strong>Documented in the source portfolio</strong><p>Workflow designs, iteration notes, device coverage, and the illustrated interaction comparison.</p></div>
+            <div><strong>Directional or still open</strong><p>The ~50% time and ~5% ticket estimates; denominators; measurement method; broader rollout; public-sharing clearance.</p></div>
+          </div>
+          <p class="source"><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=1-873" target="_blank" rel="noopener noreferrer">Original impact source</a> · External access may require Figma permissions.</p>
+          <aside class="speaker-notes" hidden>Backup. Omit the unexplained sample-size figure until its unit and methodology are known. Source links are canonical, not temporary asset URLs.</aside>
+        </section>
+
+        <section class="slide slide--appendix" data-section="Backup: workflow" data-motion="rise" aria-labelledby="title-22">
+          <p class="eyebrow reveal" style="--i:0">Backup · closure logic</p>
+          <h2 id="title-22" class="reveal" style="--i:1">The boundary conditions.</h2>
+          <div class="evidence-list grow reveal" style="--i:2">
+            <div><strong>Multiple payments, one check</strong><p>Split payments still belong to the same closable check.</p></div>
+            <div><strong>Explicit zero is not missing</strong><p>A valid zero-tip decision must be distinguishable from incomplete information.</p></div>
+            <div><strong>Saved is not closed</strong><p>Retaining entered tips does not make an incomplete check eligible for closure.</p></div>
+            <div><strong>Receipt matching remains work</strong><p>The check-centered model does not automatically order or reconcile the physical receipts.</p></div>
+          </div>
+          <p class="source"><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=1-943" target="_blank" rel="noopener noreferrer">Original system-conflict slide</a> · Clarified in conversation.</p>
+          <aside class="speaker-notes" hidden>Backup. Be precise about closure eligibility and saved tip input. Do not introduce payment-level closure as a possible successful path.</aside>
+        </section>
+
+        <section class="slide slide--appendix" data-section="Backup: delivery" data-motion="drift-left" aria-labelledby="title-23">
+          <p class="eyebrow reveal" style="--i:0">Backup · handoff coverage</p>
+          <h2 id="title-23" class="reveal" style="--i:1">Beyond the happy path.</h2>
+          <div class="visual-layout grow">
+            <figure class="media-stage device-stage reveal" style="--i:2">
+              <div class="device-showcase">
+                <div class="device-terminal">
+                  <img src="assets/toast-terminal-device.png" alt="" aria-hidden="true" width="1136" height="739">
+                  <video id="appendix-terminal-motion" data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-terminal.jpg" width="800" height="464" aria-label="Animated terminal tip-entry prototype" aria-describedby="appendix-motion-caption"><source src="assets/motion/closeout-terminal.mp4" type="video/mp4"></video>
+                </div>
+                <div class="device-handheld">
+                  <img src="assets/toast-handheld-device.png" alt="" aria-hidden="true" width="498" height="1242">
+                  <video id="appendix-handheld-motion" data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-handheld.jpg" width="440" height="876" aria-label="Animated handheld tip-entry prototype" aria-describedby="appendix-motion-caption"><source src="assets/motion/closeout-handheld.mp4" type="video/mp4"></video>
+                </div>
+              </div>
+              <figcaption id="appendix-motion-caption" class="motion-caption-heading"><span>Original animated prototypes and device artwork</span><button class="motion-toggle" type="button" data-motion-toggle aria-controls="appendix-terminal-motion appendix-handheld-motion" hidden>Pause animations</button></figcaption>
+            </figure>
+            <div class="annotation-list reveal" style="--i:3"><div><strong>Devices</strong><p>15-inch terminal, 10-inch terminal, and handheld.</p></div><div><strong>Appearance</strong><p>Light and dark theme coverage.</p></div><div><strong>States</strong><p>Empty, default, error, and input-confirmation cases.</p></div></div>
+          </div>
+          <p class="source"><a href="https://www.figma.com/design/LlMnARhmKoI1oPOmYEXp77/Misc?node-id=1-858" target="_blank" rel="noopener noreferrer">Original dev-ready delivery slide</a> · Coverage documented in the source, not a rollout claim.</p>
+          <aside class="speaker-notes" hidden>Backup. The delivery set is documented in the portfolio. Public-sharing permissions and rollout scope remain separate questions.</aside>
+        </section>
+
+      </div>
+    </div>
+    <div class="stage-controls">
+      <div class="controls-left">
+        <button class="btn btn-icon" id="menuBtn" title="Slides" type="button" aria-label="Open slide navigator" aria-expanded="false" aria-controls="sidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.75 5a.75.75 0 0 0 0 1.5h14.5a.75.75 0 0 0 0-1.5H4.75Zm0 6a.75.75 0 0 0 0 1.5h14.5a.75.75 0 0 0 0-1.5H4.75Zm0 6a.75.75 0 0 0 0 1.5h14.5a.75.75 0 0 0 0-1.5H4.75Z"/></svg></button>
+        <div class="font-controls" aria-label="Font size controls">
+          <button class="btn" id="fontDown" type="button" aria-label="Decrease font size">A−</button>
+          <span class="slide-counter" id="fontPct">100%</span>
+          <button class="btn" id="fontUp" type="button" aria-label="Increase font size">A+</button>
+        </div>
+      </div>
+      <div class="controls-center">
+        <div class="nav-bar" aria-label="Slide controls">
+          <button class="btn btn-icon" id="prev" type="button" aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.53 5.47a.75.75 0 0 1 0 1.06L9.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"/></svg></button>
+          <span class="slide-counter" id="counter" aria-live="polite" aria-atomic="true">01 / 23</span>
+          <button class="btn btn-icon" id="next" type="button" aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9.47 5.47a.75.75 0 0 0 0 1.06L14.94 12l-5.47 5.47a.75.75 0 0 0 1.06 1.06l6-6a.75.75 0 0 0 0-1.06l-6-6a.75.75 0 0 0-1.06 0Z"/></svg></button>
+        </div>
+      </div>
+      <div class="controls-right">
+        <button class="present-btn" id="presentBtn" type="button" title="Fullscreen (F)" aria-label="Enter fullscreen" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4.5 5.75C4.5 5.05964 5.05964 4.5 5.75 4.5H7.75C8.16421 4.5 8.5 4.16421 8.5 3.75C8.5 3.33579 8.16421 3 7.75 3H5.75C4.23122 3 3 4.23122 3 5.75V7.75C3 8.16421 3.33579 8.5 3.75 8.5C4.16421 8.5 4.5 8.16421 4.5 7.75V5.75ZM4.5 18.25C4.5 18.9404 5.05964 19.5 5.75 19.5H7.75C8.16421 19.5 8.5 19.8358 8.5 20.25C8.5 20.6642 8.16421 21 7.75 21H5.75C4.23122 21 3 19.7688 3 18.25V16.25C3 15.8358 3.33579 15.5 3.75 15.5C4.16421 15.5 4.5 15.8358 4.5 16.25V18.25ZM18.25 4.5C18.9404 4.5 19.5 5.05964 19.5 5.75V7.75C19.5 8.16421 19.8358 8.5 20.25 8.5C20.6642 8.5 21 8.16421 21 7.75V5.75C21 4.23122 19.7688 3 18.25 3H16.25C15.8358 3 15.5 3.33579 15.5 3.75C15.5 4.16421 15.8358 4.5 16.25 4.5H18.25ZM19.5 18.25C19.5 18.9404 18.9404 19.5 18.25 19.5H16.25C15.8358 19.5 15.5 19.8358 15.5 20.25C15.5 20.6642 15.8358 21 16.25 21H18.25C19.7688 21 21 19.7688 21 18.25V16.25C21 15.8358 20.6642 15.5 20.25 15.5C19.8358 15.5 19.5 15.8358 19.5 16.25V18.25Z"/></svg></button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sbOverlay"></div>
+    <aside class="sidebar" id="sidebar" aria-label="Slide navigator" inert>
+      <div class="sidebar-head">Slides</div>
+      <div class="sidebar-list" id="sbList"></div>
+    </aside>
+  </main>
+  <noscript><div class="no-script">JavaScript is required for slide navigation. The cover remains available; enable JavaScript to view all 23 slides.</div></noscript>
+</body>
+</html>

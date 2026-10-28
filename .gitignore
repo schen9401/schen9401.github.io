@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+.env
+.env.*
+*.local
+/resources/
+/presentation/fonts/
+/presentation/PRESENTATION.md
+/presentation/slides.md
+/presentation/context.md

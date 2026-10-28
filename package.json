@@ -1,0 +1,13 @@
+{
+  "name": "siyi-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A local personal portfolio and Toast closeout case-study presentation.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "check": "node --check site.js && node --check server.mjs && node --check presentation/deck-accessibility.js && node --check presentation/motion.js && node --test"
+  }
+}
