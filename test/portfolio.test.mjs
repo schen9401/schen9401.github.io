@@ -217,6 +217,9 @@ test('public deployment excludes preparation files and uses system-font fallback
   for (const token of ['body', 'display', 'display-2']) {
     assert.ok(presentation.includes(`--${token}: Arial, sans-serif;`));
   }
+  for (const page of pages) {
+    assert.doesNotMatch(await readFile(resolve(root, page), 'utf8'), /Local portfolio draft|Not published|reviewable local draft/, page);
+  }
 });
 
 test('resume is readable in the website with source-qualified history and navigation', async () => {
