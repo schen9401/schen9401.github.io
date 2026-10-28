@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.getElementById('sidebar');
   const menu = document.getElementById('menuBtn');
   const controls = document.querySelector('.stage-controls');
+  const previous = document.getElementById('prev');
+  const next = document.getElementById('next');
   const slides = [...deck.querySelectorAll(':scope > .slide')];
   const status = document.createElement('span');
   status.className = 'deck-status';
@@ -20,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let sidebarWasOpen = false;
 
   function syncSlides() {
+    // The shared runtime updates its controls before updating its current index.
+    const visible = slides.filter((slide) => !slide.classList.contains('hide'));
+    const activeIndex = visible.findIndex((slide) => slide.classList.contains('is-active'));
+    previous.disabled = activeIndex <= 0;
+    next.disabled = activeIndex < 0 || activeIndex === visible.length - 1;
     for (const slide of slides) {
       const active = slide.classList.contains('is-active');
       if (!active && slide.contains(document.activeElement)) menu.focus();
