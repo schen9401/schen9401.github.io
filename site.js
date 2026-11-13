@@ -1,3 +1,22 @@
+if (document.body.classList.contains('landing-page')) {
+  const legacyRoutes = { '#work': 'work/', '#more-work': 'work/#more-work', '#resume': 'resume/', '#about': 'about/' };
+  const redirectLegacyLink = () => {
+    const route = legacyRoutes[window.location.hash];
+    if (route) window.location.replace(new URL(route, window.location.href));
+  };
+  redirectLegacyLink();
+  window.addEventListener('hashchange', redirectLegacyLink);
+}
+
+function revealLinkedSnapshot() {
+  const target = document.getElementById(window.location.hash.slice(1));
+  if (!target?.matches('details.snapshot')) return;
+  target.open = true;
+  target.scrollIntoView({ block: 'start', behavior: 'instant' });
+}
+revealLinkedSnapshot();
+window.addEventListener('hashchange', revealLinkedSnapshot);
+
 const dialog = document.querySelector('.image-dialog');
 
 if (dialog && typeof dialog.showModal === 'function') {

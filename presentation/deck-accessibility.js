@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.getElementById('sidebar');
   const menu = document.getElementById('menuBtn');
   const controls = document.querySelector('.stage-controls');
+  const home = document.querySelector('.deck-home-link');
   const previous = document.getElementById('prev');
   const next = document.getElementById('next');
   const slides = [...deck.querySelectorAll(':scope > .slide')];
@@ -27,12 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeIndex = visible.findIndex((slide) => slide.classList.contains('is-active'));
     previous.disabled = activeIndex <= 0;
     next.disabled = activeIndex < 0 || activeIndex === visible.length - 1;
+    const activeSlide = visible[activeIndex];
+    const scrollable = Boolean(activeSlide && activeSlide.scrollHeight > activeSlide.clientHeight + 1);
+    deck.toggleAttribute('data-wheel-pass', scrollable);
+    deck.toggleAttribute('data-swipe-pass', scrollable);
+    const message = scrollable
+      ? 'Scroll within this slide or focus it and use up and down arrows. Use left and right arrows to change slides.'
+      : document.documentElement.hasAttribute('data-text-enlarged') ? 'Text enlarged.' : '';
+    if (status.textContent !== message) status.textContent = message;
     for (const slide of slides) {
       const active = slide.classList.contains('is-active');
       if (!active && slide.contains(document.activeElement)) menu.focus();
       slide.inert = !active;
       slide.setAttribute('aria-hidden', String(!active));
-      slide.tabIndex = active && document.documentElement.hasAttribute('data-text-enlarged') ? 0 : -1;
+      slide.tabIndex = active && scrollable ? 0 : -1;
+      if (active && scrollable) slide.setAttribute('aria-describedby', status.id);
+      else slide.removeAttribute('aria-describedby');
     }
     for (const [index, thumb] of sidebar.querySelectorAll('.thumb').entries()) {
       if (slides[index].classList.contains('is-active')) thumb.setAttribute('aria-current', 'true');
@@ -48,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     else sidebar.removeAttribute('aria-modal');
     deck.inert = open;
     controls.inert = open;
+    if (home) home.inert = open;
     menu.setAttribute('aria-expanded', String(open));
     menu.setAttribute('aria-label', open ? 'Close slide navigator' : 'Open slide navigator');
     if (!sidebarWasOpen && open) sidebar.querySelector('.thumb.active').focus();
@@ -75,20 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   document.getElementById('fontDown').setAttribute('aria-label', 'Decrease text size');
   document.getElementById('fontUp').setAttribute('aria-label', 'Increase text size');
-  document.getElementById('fontUp').title = 'Increase text size; enlarged slides can be scrolled';
+  document.getElementById('fontUp').title = 'Increase text size; overflowing slides can be scrolled';
+  const fullscreen = document.getElementById('presentBtn');
+  const labelFullscreen = () => fullscreen.setAttribute('aria-label', 'Fullscreen');
+  labelFullscreen();
+  for (const name of ['fullscreenchange', 'webkitfullscreenchange']) document.addEventListener(name, labelFullscreen);
 
   function syncTextSize() {
     const enlarged = Number(document.documentElement.style.getPropertyValue('--font-scale') || 1) > 1;
     document.documentElement.toggleAttribute('data-text-enlarged', enlarged);
-    deck.toggleAttribute('data-wheel-pass', enlarged);
-    deck.toggleAttribute('data-swipe-pass', enlarged);
-    if (enlarged) {
-      status.textContent = 'Text enlarged. Scroll within a slide or focus it and use up and down arrows. Use left and right arrows to change slides.';
-      for (const slide of slides) slide.setAttribute('aria-describedby', status.id);
-    } else {
-      status.textContent = '';
-      for (const slide of slides) slide.removeAttribute('aria-describedby');
-    }
     syncSlides();
   }
 
@@ -97,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
       event.stopPropagation();
       return;
     }
-    if (document.documentElement.hasAttribute('data-text-enlarged') &&
-        event.target instanceof Element && event.target.closest('#deck > .slide') &&
+    const slide = event.target instanceof Element ? event.target.closest('#deck > .slide') : null;
+    if (slide && slide.scrollHeight > slide.clientHeight + 1 &&
         ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) {
       event.stopPropagation();
       return;
@@ -134,4 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
     attributes: true,
     attributeFilter: ['style'],
   });
+  deck.addEventListener('load', syncSlides, true);
+  if (typeof ResizeObserver === 'function') {
+    const observer = new ResizeObserver(syncSlides);
+    observer.observe(deck);
+    for (const slide of slides) for (const child of slide.children) observer.observe(child);
+  } else {
+    window.addEventListener('resize', syncSlides);
+  }
 });

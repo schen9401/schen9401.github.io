@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
   <meta name="description" content="Toast restaurant closeout: a product design case study about payment entry, check-level closure, and preserving progress.">
   <title>Rethinking restaurant closeout — Siyi Chen</title>
   <link rel="stylesheet" href="deck.css">
@@ -15,8 +16,9 @@
 <!-- Toast-only working draft. Autopilot build from PRESENTATION.md; editorial copy remains reviewable.
      20 core slides, 3 backups, 25–30 minutes. Historical role: senior product designer.
      Outcomes are directional estimates. No claim of principal title. -->
-<body data-brand="neutral" data-mode="light" data-shell="rehearsal" data-edit="false">
+<body data-brand="neutral" data-mode="dark" data-shell="rehearsal" data-edit="false">
   <main class="stage" id="stage" aria-label="Toast closeout presentation">
+    <h1 class="deck-title">Rethinking restaurant closeout</h1>
     <div class="stage-area">
       <div class="deck" id="deck">
 
@@ -25,7 +27,7 @@
           <div class="cover-grid">
             <div class="cover-copy">
               <p class="eyebrow reveal" style="--i:0">Toast · Product design case study · 2024</p>
-              <h1 class="hero-title reveal" style="--i:1" id="title-1">Rethinking<br>restaurant<br><span class="accent">closeout.</span></h1>
+              <h2 class="hero-title reveal" style="--i:1" id="title-1">Rethinking<br>restaurant<br><span class="accent">closeout.</span></h2>
               <p class="cover-deck reveal" style="--i:2">Make end-of-day work faster.<br>Keep incomplete work visible.</p>
               <p class="byline reveal" style="--i:3">Siyi Chen <span>Senior product designer at the time</span></p>
             </div>
@@ -47,8 +49,8 @@
               <div class="ruled-note"><strong>The design task</strong><p>Reduce repeated navigation and entry effort without letting incomplete checks disappear.</p></div>
             </div>
             <figure class="media-stage reveal" style="--i:3">
-              <img src="assets/legacy-closeout.png" alt="Legacy Toast screen with check tiles and a separate set of check actions." width="720" height="407">
-              <figcaption>The legacy check workflow</figcaption>
+              <video data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-legacy.jpg" width="720" height="408" aria-label="Original legacy Toast closeout walkthrough" aria-describedby="legacy-context-caption"><source src="assets/motion/closeout-legacy.mp4" type="video/mp4"><p>Use a current browser to play this walkthrough.</p></video>
+              <figcaption id="legacy-context-caption">The original legacy check workflow · Silent, looping recording</figcaption>
             </figure>
           </div>
           <p class="source">Source: original Toast case, problem and workflow slides.</p>
@@ -195,7 +197,7 @@
           <p class="eyebrow reveal" style="--i:0">Interaction comparison</p>
           <h2 id="title-13" class="reveal" style="--i:1">Bring the task<br>onto one page.</h2>
           <div class="comparison-grid image-comparison grow">
-            <figure class="reveal" style="--i:2"><img src="assets/legacy-closeout.png" alt="Legacy check interface requiring movement between different task screens." width="720" height="407"><figcaption><strong>Legacy task path</strong><span>5–6 clicks · 4 pages</span></figcaption></figure>
+            <figure class="reveal" style="--i:2"><video data-motion-preview muted loop controls playsinline preload="none" poster="assets/motion/closeout-legacy.jpg" width="720" height="408" aria-label="Original legacy Toast closeout task path" aria-describedby="legacy-comparison-caption"><source src="assets/motion/closeout-legacy.mp4" type="video/mp4"><p>Use a current browser to play this walkthrough.</p></video><figcaption id="legacy-comparison-caption"><strong>Legacy task path</strong><span>5–6 clicks · 4 pages</span></figcaption></figure>
             <figure class="reveal" style="--i:3"><img src="assets/check-closeout.png" alt="Redesigned tip-entry and closure workflow on one screen." width="800" height="464"><figcaption><strong>Redesigned task path</strong><span>2 clicks · 1 page</span></figcaption></figure>
           </div>
           <p class="source">Counts describe the task path illustrated in the original comparison, not every closeout scenario.</p>
@@ -322,17 +324,17 @@
 
       </div>
     </div>
-    <div class="stage-controls">
+    <div class="stage-controls" role="group" aria-label="Presentation controls">
       <div class="controls-left">
         <button class="btn btn-icon" id="menuBtn" title="Slides" type="button" aria-label="Open slide navigator" aria-expanded="false" aria-controls="sidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.75 5a.75.75 0 0 0 0 1.5h14.5a.75.75 0 0 0 0-1.5H4.75Zm0 6a.75.75 0 0 0 0 1.5h14.5a.75.75 0 0 0 0-1.5H4.75Zm0 6a.75.75 0 0 0 0 1.5h14.5a.75.75 0 0 0 0-1.5H4.75Z"/></svg></button>
-        <div class="font-controls" aria-label="Font size controls">
+        <div class="font-controls" role="group" aria-label="Text size">
           <button class="btn" id="fontDown" type="button" aria-label="Decrease font size">A−</button>
           <span class="slide-counter" id="fontPct">100%</span>
           <button class="btn" id="fontUp" type="button" aria-label="Increase font size">A+</button>
         </div>
       </div>
       <div class="controls-center">
-        <div class="nav-bar" aria-label="Slide controls">
+        <div class="nav-bar" role="group" aria-label="Slide navigation">
           <button class="btn btn-icon" id="prev" type="button" aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.53 5.47a.75.75 0 0 1 0 1.06L9.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"/></svg></button>
           <span class="slide-counter" id="counter" aria-live="polite" aria-atomic="true">01 / 23</span>
           <button class="btn btn-icon" id="next" type="button" aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9.47 5.47a.75.75 0 0 0 0 1.06L14.94 12l-5.47 5.47a.75.75 0 0 0 1.06 1.06l6-6a.75.75 0 0 0 0-1.06l-6-6a.75.75 0 0 0-1.06 0Z"/></svg></button>
@@ -348,6 +350,7 @@
       <div class="sidebar-list" id="sbList"></div>
     </aside>
   </main>
+  <a class="deck-home-link" href="../presentations/">← Presentations</a>
   <noscript><div class="no-script">JavaScript is required for slide navigation. The cover remains available; enable JavaScript to view all 23 slides.</div></noscript>
 </body>
 </html>

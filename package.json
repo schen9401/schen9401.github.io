@@ -8,6 +8,6 @@
   "scripts": {
     "start": "node server.mjs",
     "dev": "node server.mjs",
-    "check": "node --check site.js && node --check server.mjs && node --check presentation/deck-accessibility.js && node --check presentation/motion.js && node --test"
+    "check": "node --check site.js && node --check landing-field.js && node --check landing-constellation.js && node --check landing-explorer.js && node --check landing-lens.js && node --check landing-trail.js && node --check server.mjs && node --check presentation/deck-accessibility.js && node --check presentation/motion.js && node --test"
   }
 }
