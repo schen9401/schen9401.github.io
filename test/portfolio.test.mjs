@@ -44,6 +44,26 @@ test('skip links have focusable main destinations and the deck retains a persist
   }
 });
 
+test('every website header matches the homepage content and preserves section context', async () => {
+  const header = (html) => html.match(/<header class="site-header wrap">[\s\S]*?<\/header>/)?.[0];
+  const normalize = (html) => html.replaceAll('href="../', 'href="').replace(/ aria-current="[^"]+"/g, '');
+  const home = header(await readFile(resolve(root, 'index.html'), 'utf8'));
+  assert.ok(home);
+  for (const page of pages.filter((page) => page !== 'presentation/index.html')) {
+    const markup = header(await readFile(resolve(root, page), 'utf8'));
+    assert.ok(markup, `${page}: missing site header`);
+    assert.equal(normalize(markup), home, `${page}: header content or structure differs from home`);
+    const current = [...markup.matchAll(/<a href="([^"]+)" aria-current="([^"]+)">/g)];
+    if (page === 'index.html') assert.equal(current.length, 0);
+    else {
+      assert.equal(current.length, 1, `${page}: mark exactly one current section`);
+      const section = cases.includes(page) ? 'work' : page.split('/')[0];
+      assert.equal(current[0][1], `../${section}/`, page);
+      assert.equal(current[0][2], cases.includes(page) ? 'location' : 'page', page);
+    }
+  }
+});
+
 test('deck reflow reserves the fixed controls and stacks real diagram grids on phones', async () => {
   const css = await readFile(resolve(root, 'presentation/presentation.css'), 'utf8');
   const html = await readFile(resolve(root, 'presentation/index.html'), 'utf8');
@@ -163,8 +183,11 @@ test('website presents five cases separately from the Toast-only presentation', 
   assert.match(home, /data-field-status/);
   assert.match(home, /Current model: Experience\./);
   assert.match(home, /<details class="field-options" data-field-options hidden name="constellation-tools">/);
-  assert.match(home, /<summary class="field-options-summary">Controls /);
-  assert.match(home, /data-explorer-reset>Reset /);
+  assert.match(home, /<summary class="field-options-summary">Accessibility /);
+  assert.match(home, /data-explorer-reset><span>Reset<\/span>/);
+  assert.match(home, /role="group" aria-labelledby="field-accessibility-title" aria-describedby="field-accessibility-description"/);
+  assert.match(home, /<h2 id="field-accessibility-title">Accessibility<\/h2>/);
+  assert.match(home, /<p id="field-accessibility-description">Constellation controls<\/p>/);
   assert.match(home, /Reset clears all explored chapters\./);
   assert.doesNotMatch(home, /Restart exploration|Text sparkle|data-caption-animation|field-animation-toggle/);
   assert.match(home, /<p class="landing-eyebrow">Product designer<\/p>\s*<h1/);
@@ -229,7 +252,7 @@ test('website presents five cases separately from the Toast-only presentation', 
   assert.match(css, /\.landing-footer-divider \{ flex: 0 0 1px; height: 16px; border-left: 1px solid var\(--muted\); \}/);
   assert.match(css, /\.contact-linkedin-icon \{ width: auto; height: 16px; flex: 0 0 auto; \}/);
   assert.match(css, /\.landing-footer \.field-options \{ margin-left: auto; flex: 0 0 auto; \}/);
-  assert.match(home, /<summary class="field-options-summary">Controls <svg [^>]*aria-hidden="true"[^>]*><path /);
+  assert.match(home, /<summary class="field-options-summary">Accessibility <svg [^>]*aria-hidden="true"[^>]*><path /);
   assert.match(css, /\.field-options-summary \{[^}]*align-items: center;[^}]*line-height: 1;/);
   assert.match(css, /\.field-options-summary svg \{ display: block; flex: 0 0 12px;/);
   assert.match(css, /\.field-options\[open\] \.field-options-summary svg \{ transform: rotate\(180deg\);/);

@@ -26,6 +26,8 @@ class Target {
 function setup({ reducedMotion = false, touch = false, canvasAvailable = true } = {}) {
   const document = new Target();
   document.hidden = false;
+  document.body = new Target();
+  document.body.ownerDocument = document;
   const environment = new Target();
   environment.devicePixelRatio = 3;
   const queries = new Map();
@@ -506,9 +508,9 @@ test('long camera turns use the short direction and a bounded angular speed', ()
   field.controller.destroy();
 });
 
-test('Controls keeps arrow activation available across focus changes', () => {
+test('Accessibility keeps arrow activation available across focus changes', () => {
   const field = setup();
-  assert.equal(field.root.querySelector('[data-field-options]'), null, 'Controls lives in the footer, not inside the map');
+  assert.equal(field.root.querySelector('[data-field-options]'), null, 'Accessibility lives in the footer, not inside the map');
   assert.equal(field.options.hidden, false);
   field.options.open = true;
   for (const selector of ['[data-field-left]', '[data-field-right]']) {
@@ -518,12 +520,12 @@ test('Controls keeps arrow activation available across focus changes', () => {
     field.options.emit('focusout', { relatedTarget: field.nodes.get('[data-field-stage]') });
     assert.equal(field.options.open, true, 'Focus movement must not hide a pending pointer-click target');
     arrow.emit('click');
-    assert.equal(field.options.open, true, 'Browsing stars leaves Controls open');
+    assert.equal(field.options.open, true, 'Browsing stars leaves Accessibility open');
   }
   field.controller.destroy();
 });
 
-test('Controls supports Escape, outside dismissal and focus restoration without clearing a chapter', () => {
+test('Accessibility supports Escape, outside dismissal and focus restoration without clearing a chapter', () => {
   const field = setup();
   field.options.open = true;
   field.options.emit('toggle');
@@ -548,4 +550,27 @@ test('Controls supports Escape, outside dismissal and focus restoration without 
   assert.equal(field.options.open, false);
   assert.equal(field.document.activeElement, field.summary);
   field.controller.destroy();
+});
+
+test('outside dismissal recovers native body focus without overriding another focusable target', () => {
+  for (const model of [false, true]) {
+    for (const focusable of [false, true]) {
+      const field = setup();
+      field.advance();
+      const pane = model ? field.modelOptions : field.options;
+      const trigger = model ? field.modelSummary : field.summary;
+      const inside = model ? field.form : field.nodes.get('[data-field-right]');
+      const outside = field.nodes.get('[data-field-stage]');
+      pane.open = true;
+      inside.focus();
+      field.document.emit('pointerdown', { target: outside });
+      assert.equal(pane.open, false);
+      assert.equal(field.document.activeElement, trigger);
+      field.document.activeElement = focusable ? outside : field.document.body;
+      field.advance();
+      assert.equal(field.document.activeElement, focusable ? outside : trigger);
+      field.controller.destroy();
+      assert.equal(field.frames.size, 0);
+    }
+  }
 });

@@ -80,6 +80,7 @@ export function mountField(root, environment = window) {
   let pageActive = true;
   let destroyed = false;
   let frame = null;
+  let pointerFocusFrame = null;
   let lastTime = null;
   let width = 1;
   let height = 1;
@@ -362,8 +363,22 @@ export function mountField(root, environment = window) {
     }
   }
   function outsideOptions(event) {
-    if (options.open && !options.contains(event.target)) closeOptions(options.contains(document.activeElement));
-    if (modelOptions.open && !modelOptions.contains(event.target)) closeModel(modelOptions.contains(document.activeElement));
+    if (pointerFocusFrame !== null) environment.cancelAnimationFrame(pointerFocusFrame);
+    pointerFocusFrame = null;
+    let restore;
+    for (const [pane, trigger] of [[options, summary], [modelOptions, modelSummary]]) {
+      if (!pane.open || pane.contains(event.target)) continue;
+      if (pane.contains(document.activeElement)) restore = trigger;
+      pane.open = false;
+    }
+    if (restore) {
+      restore.focus({ preventScroll: true });
+      pointerFocusFrame = environment.requestAnimationFrame(() => {
+        pointerFocusFrame = null;
+        // Native pointer focus can undo restoration when the outside target is not focusable.
+        if (!destroyed && document.activeElement === document.body) restore.focus({ preventScroll: true });
+      });
+    }
   }
   function optionsChanged(event) {
     if (event.currentTarget.open) {
@@ -417,6 +432,7 @@ export function mountField(root, environment = window) {
   return {
     destroy() {
       destroyed = true;
+      if (pointerFocusFrame !== null) environment.cancelAnimationFrame(pointerFocusFrame);
       endDrag();
       sync();
       resizeObserver.disconnect();
