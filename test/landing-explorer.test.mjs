@@ -217,6 +217,37 @@ test('experience previews consolidate company and date; only activation unfolds 
   ui.controller.destroy();
 });
 
+test('expanded chapters mute other primary stars without muting projects or retaining stale emphasis', () => {
+  const ui = setup();
+  const muted = () => ui.graph.querySelectorAll('.is-muted').map(({ dataset }) => dataset.node);
+  assert.deepEqual(muted(), []);
+  ui.hover('toast');
+  assert.deepEqual(muted(), [], 'Hover previews do not dim other chapters');
+  ui.click('toast');
+  assert.deepEqual(muted(), ['goto', 'bevi', 'microsoft']);
+  assert.ok(ui.node('toast').classList.contains('is-expanded'));
+  ui.click('cash');
+  assert.deepEqual(muted(), ['goto', 'bevi', 'microsoft'], 'Project selection keeps its parent chapter emphasized');
+  assert.equal(ui.node('cash').classList.contains('is-muted'), false);
+  ui.click('goto');
+  assert.deepEqual(muted(), ['toast', 'bevi', 'microsoft'], 'Switching chapters moves the emphasis');
+  ui.click('goto');
+  assert.deepEqual(muted(), [], 'Collapsing a chapter restores all primary stars');
+  ui.click('bevi');
+  ui.root.emit('keydown', { key: 'Escape', preventDefault() {} });
+  assert.deepEqual(muted(), []);
+  ui.click('toast');
+  ui.reset();
+  assert.deepEqual(muted(), []);
+  ui.click('toast');
+  ui.controller.setMode('skills');
+  ui.click('game');
+  assert.deepEqual(muted(), [], 'Skill selections do not inherit chapter dimming');
+  ui.controller.setMode('experience');
+  assert.deepEqual(muted(), []);
+  ui.controller.destroy();
+});
+
 test('every experience star includes its date caption in the native button text', () => {
   const ui = setup();
   for (const experience of experiences) {
@@ -250,7 +281,7 @@ test('Microsoft selects a current chapter without inventing projects or an empty
   assert.equal(ui.graph.querySelector('.explorer-connections').querySelectorAll('line').length, 0);
   assert.equal(ui.detail.querySelector('h2').textContent, 'Microsoft');
   assert.match(ui.detail.textContent, /2024–now/);
-  assert.match(ui.detail.textContent, /AI-native CRM for sellers with agents and Copilot/);
+  assert.match(ui.detail.textContent, /Copilot sales agents across web and native mobile/);
   assert.equal(ui.detail.querySelector('a').href, 'resume/');
   assert.match(ui.detail.querySelector('a').textContent, /View résumé/);
   assert.doesNotMatch(ui.root.querySelector('[data-explorer-status]').textContent, /Projects available|unfold projects/);
@@ -278,15 +309,16 @@ test('Microsoft shows its sourced logo, not a generic mark or invented product s
   assert.equal(ui.detail.children[0].className, 'explorer-visual', 'The image remains in the left column');
   const heading = ui.detail.querySelector('.explorer-heading--experience');
   assert.equal(heading.querySelector('h2').textContent, 'Microsoft');
-  assert.equal(heading.querySelector('.explorer-kicker').textContent, '2024–now');
+  assert.equal(heading.querySelector('.explorer-kicker').textContent, 'Senior product designer · 2024–now');
   assert.equal(heading.querySelector('.explorer-heading-separator').textContent, ' · ');
   assert.equal(ui.detail.querySelector('.explorer-glyph'), null);
-  assert.match(ui.detail.textContent, /native mobile foundations for immersive video, voice, and chat/);
-  assert.match(ui.detail.textContent, /helping studio PMs, engineers, and designers bring designs to production faster/);
-  ui.hover('toast');
+  assert.match(ui.detail.textContent, /native mobile in M365, Outlook, and Dynamics 365/);
+  assert.match(ui.detail.textContent, /lead and own the studio’s Sales vibecoding toolkit/);
+  ui.click('toast');
+  ui.click('closeout');
   assert.equal(ui.detail.querySelector('img').classList.contains('explorer-image--logo'), false);
   assert.equal(ui.detail.querySelector('img').width, 124, 'Product screenshot sizing is unchanged');
-  ui.hover('microsoft');
+  ui.click('microsoft');
   assert.equal(ui.detail.querySelector('img').classList.contains('explorer-image--logo'), true);
   const svg = await readFile(new URL('../assets/work/microsoft-logo.svg', import.meta.url), 'utf8');
   assert.match(svg, /<svg\b/);
@@ -295,44 +327,91 @@ test('Microsoft shows its sourced logo, not a generic mark or invented product s
   ui.controller.destroy();
 });
 
+test('company logos replace overview imagery without replacing project previews', async () => {
+  for (const [id, label, project, preview] of [
+    ['toast', 'Toast', 'closeout', 'presentation/assets/check-closeout.png'],
+    ['goto', 'GoTo', 'wallboard', 'assets/work/wallboard-cast.jpg'],
+    ['bevi', 'Bevi', 'dispensing', 'assets/work/bevi-device.png'],
+  ]) {
+    const ui = setup();
+    ui.hover(id);
+    const logo = ui.detail.querySelector('img');
+    assert.equal(logo.src, `assets/work/${id}-logo.svg`);
+    assert.equal(logo.alt, `${label} logo.`);
+    assert.equal(logo.classList.contains('explorer-image--logo'), true);
+    const svg = await readFile(new URL(`../assets/work/${id}-logo.svg`, import.meta.url), 'utf8');
+    assert.match(svg, /<svg\b/);
+    assert.doesNotMatch(svg, /<script\b|<foreignObject\b|<image\b|\bon\w+=|\bhref=|javascript:/i);
+    ui.click(id);
+    ui.click(project);
+    const image = ui.detail.querySelector('img');
+    assert.equal(image.src, preview);
+    assert.equal(image.classList.contains('explorer-image--logo'), false);
+    ui.controller.destroy();
+  }
+});
+
 test('company overviews tell concise design stories grounded in the supplied industries', () => {
   const ui = setup();
+  const roles = {
+    microsoft: 'Senior product designer',
+    toast: 'Senior product designer',
+    goto: 'Product designer',
+    bevi: 'Solo UX/UI designer',
+  };
   const contexts = {
-    microsoft: ['AI-native CRM', 'sellers', 'agents', 'Copilot', 'native mobile foundations', 'immersive video, voice, and chat', 'code-ready Sales Toolkit', 'studio PMs, engineers, and designers', 'designs to production faster'],
-    toast: ['fintech', 'restaurant POS'],
+    microsoft: ['Copilot sales agents', 'web', 'native mobile', 'M365, Outlook, and Dynamics 365', 'modernize Legacy D365', 'cross-platform', 'canvas agentic framework', 'Arc design language', 'lead and own', 'Sales vibecoding toolkit'],
+    toast: ['all-in-one POS system', 'restaurant operations', 'payments and closeout', 'for servers and the admin home and global navigation', 'for managers to accelerate efficiency and growth'],
     bevi: ['hydration', 'IoT', 'smart water cooler'],
-    goto: ['UCaaS', 'VoIP', 'contact centers', 'calling'],
+    goto: ['revamped', 'call-center dashboards', 'intelligence tools', 'crafted', 'multi-device telephony platform', 'boost engagement', 'strengthen retention', 'fuel business growth'],
   };
   for (const experience of experiences) {
     ui.reset();
     ui.hover(experience.id);
+    const heading = ui.detail.querySelector('.explorer-heading--experience');
+    assert.equal(heading.querySelector('h2').textContent, experience.label);
+    assert.equal(heading.querySelector('.explorer-kicker').textContent, `${roles[experience.id]} · ${experience.year}`, 'Job title appears after the company and before its dates');
     const caption = ui.detail.querySelector('.explorer-description').textContent;
     assert.equal(caption, experience.description);
     for (const context of contexts[experience.id]) assert.ok(caption.includes(context), `${experience.label}: ${context}`);
-    assert.equal(caption.match(/[.!?](?:\s|$)/g)?.length, experience.id === 'microsoft' ? 2 : 1, 'Microsoft summarizes AI-native selling and studio enablement; the other captions remain unchanged');
+    assert.equal(caption.match(/[.!?](?:\s|$)/g)?.length, 1, 'Company overviews remain a single sentence');
     const highlights = ui.detail.querySelectorAll('strong').map((node) => node.textContent);
-    assert.deepEqual(highlights, experience.highlights || [], 'Only the requested Microsoft highlights receive semantic emphasis');
+    assert.deepEqual(highlights, experience.highlights || [], 'Only approved key phrases receive semantic emphasis');
+    if (experience.id === 'toast') {
+      assert.deepEqual(highlights, ['all-in-one POS system', 'payments', 'closeout', 'admin home', 'global navigation'], 'Emphasize the POS system and product areas, leaving conjunctions and the efficiency and growth outcome unhighlighted');
+    }
     if (experience.id === 'microsoft') {
-      assert.ok(caption.split(/\s+/).length <= 37, 'Keep the full Microsoft scope in fewer than the original 41 words');
-      assert.ok(caption.length <= 249, 'The concise summary remains shorter without clipping or smaller type');
+      assert.deepEqual(highlights, ['sales agents', 'web', 'native mobile', 'canvas agentic framework', 'vibecoding toolkit'], 'Include web in the five approved highlights while leaving Sales before vibecoding toolkit unbolded');
+    }
+    if (experience.id === 'goto') {
+      assert.equal(highlights.length, 0, 'GoTo has no highlighted phrases yet');
+      assert.doesNotMatch(caption, /\d|%|×/, 'GoTo describes outcomes without numerical metrics');
     }
   }
   ui.controller.destroy();
 });
 
-test('project previews use their own imagery and accurate case or snapshot destinations', () => {
+test('selected projects use their own imagery and accurate case or snapshot destinations', () => {
   const ui = setup();
+  const model = constellationGeometry(experiences, skills);
   for (const experience of experiences) {
     ui.click(experience.id);
+    const group = model.groups.find(({ id }) => id === experience.id);
+    const scene = constellationScene(model, { expanded: experience.id, width: 640, height: 520, camera: { yaw: group.angle + .35, pitch: .12 } });
     for (const project of experience.projects) {
-      ui.hover(project.id);
+      ui.click(project.id);
+      ui.controller.updateScene(scene);
       assert.equal(ui.detail.querySelector('h2').textContent, project.title);
       assert.equal(ui.detail.querySelector('a').href, project.href);
       assert.match(ui.detail.textContent, new RegExp(project.kind));
       const image = ui.detail.querySelector('img');
       assert.equal(image?.src, project.image, 'A screenshot is never borrowed from another project');
-      const selectedLines = ui.graph.querySelectorAll('line').filter((line) => line.classList.contains('is-selected'));
+      const lines = ui.graph.querySelector('.explorer-connections').querySelectorAll('line');
+      const selectedLines = lines.filter((line) => line.classList.contains('is-selected'));
       assert.ok(selectedLines.length >= 1 && selectedLines.length <= 2, 'The path lights the actual adjoining constellation edges');
+      for (const [index, edge] of scene.edges.entries()) {
+        assert.equal(lines[index].classList.contains('is-selected'), edge.from.id === project.id || edge.to.id === project.id, 'Highlights follow the rerouted endpoints, not the original content order');
+      }
     }
   }
   ui.controller.destroy();
@@ -375,7 +454,9 @@ test('project target visibility, native tab order, and SVG endpoints follow the 
     assert.equal(node.style.top, `${star.y}px`);
     assert.equal(node.style.height, '104px', 'Collision geometry and the native text target have the same height');
     assert.equal(node.style.visibility, 'visible');
-    assert.equal(node.style.opacity, '1', 'Depth never dims the readable label');
+    assert.equal(node.style.opacity, undefined, 'Scene updates must not override whole-chapter de-emphasis');
+    assert.equal(node.classList.contains('is-muted'), node.dataset.kind === 'experience' && star.id !== 'toast');
+    assert.equal(node.getAttribute('aria-hidden'), null, 'Background chapters remain accessible');
     assert.equal(node.tabIndex, 0);
   }
   for (const [index, { from, to }] of scene.edges.entries()) {
@@ -422,6 +503,34 @@ test('click and touch pin content until reset or another explicit selection', ()
   ui.controller.destroy();
 });
 
+test('company, project, and skill pins survive hover and focus until another activation', () => {
+  for (const { mode, selections, title, alternatives } of [
+    { mode: 'experience', selections: ['toast'], title: 'Toast', alternatives: ['cash', 'goto'] },
+    { mode: 'experience', selections: ['toast', 'cash'], title: 'Cash Drawer 2.0', alternatives: ['closeout', 'toast', 'goto'] },
+    { mode: 'skills', selections: ['game'], title: 'Game design', alternatives: ['iot', 'vibe-coding'] },
+  ]) {
+    const ui = setup();
+    ui.controller.setMode(mode);
+    for (const id of selections) ui.click(id);
+    const version = ui.root.dataset.explorerState;
+    const status = ui.root.querySelector('[data-explorer-status]');
+    const announcement = status.textContent;
+    for (const id of alternatives) {
+      ui.hover(id);
+      assert.equal(ui.root.dataset.explorerState, version, `${title} survives hovering over ${id}`);
+      ui.node(id).focus();
+      assert.equal(ui.document.activeElement, ui.node(id), 'Focus can move without changing the selection');
+      assert.equal(ui.root.dataset.explorerState, version, `${title} survives focusing ${id}`);
+      assert.equal(ui.detail.querySelector('h2').textContent, title);
+      assert.equal(status.textContent, announcement, 'Browsing focus does not announce a new selection');
+    }
+    ui.click(alternatives[0]);
+    assert.notEqual(ui.detail.querySelector('h2').textContent, title, 'Explicit activation still replaces the details');
+    assert.equal(ui.node(alternatives[0]).classList.contains('is-pinned'), true);
+    ui.controller.destroy();
+  }
+});
+
 test('keyboard tab order follows the selected experience into its project group', () => {
   const ui = setup();
   ui.node('toast').focus();
@@ -430,6 +539,8 @@ test('keyboard tab order follows the selected experience into its project group'
   const buttons = ui.graph.querySelectorAll('button');
   assert.deepEqual(buttons.map(({ dataset }) => dataset.node), ['toast', 'closeout', 'cash', 'web', 'pos', 'goto', 'bevi', 'microsoft']);
   ui.node('closeout').focus();
+  assert.equal(ui.detail.querySelector('h2').textContent, 'Toast', 'Tabbing to a project preserves the selected company description');
+  ui.click('closeout');
   assert.equal(ui.detail.querySelector('h2').textContent, 'Check-centered closeout');
   assert.equal(ui.document.activeElement, ui.node('closeout'));
   ui.hover('goto');
@@ -577,7 +688,7 @@ test('dragging either map does not replace previews as moving stars cross the po
   assert.equal(ui.detail.querySelector('h2').textContent, 'Toast');
   ui.root.dataset.fieldDragging = 'false';
   ui.hover('goto');
-  assert.match(ui.detail.textContent, /UCaaS/);
+  assert.equal(ui.detail.querySelector('h2').textContent, 'GoTo');
   ui.controller.setMode('skills');
   ui.hover('iot');
   ui.root.dataset.fieldDragging = 'true';
@@ -623,7 +734,7 @@ test('arrow traversal selects available anchors and projects, wraps and preserve
 test('image-free details omit generic letter tiles and redundant skill metadata', () => {
   const ui = setup();
   ui.click('toast');
-  ui.hover('pos');
+  ui.click('pos');
   assert.equal(ui.detail.querySelector('.explorer-visual'), null);
   assert.equal(ui.detail.querySelector('.explorer-kicker').textContent, 'Toast · Brief snapshot');
   ui.controller.setMode('skills');

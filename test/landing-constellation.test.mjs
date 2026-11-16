@@ -15,12 +15,6 @@ test('four distinct 3D anchor stars preserve eleven source projects without inve
     assert.equal(group.anchor.kind, 'experience');
     assert.equal(group.id, experiences[index].id);
     assert.deepEqual(group.projects.map(({ id }) => id), experiences[index].projects.map(({ id }) => id));
-    const reached = new Set([group.id]);
-    for (const [from, to] of group.edges) {
-      assert.ok(reached.has(from));
-      reached.add(to);
-    }
-    assert.equal(reached.size, group.projects.length + 1);
     for (const star of [group.anchor, ...group.projects]) {
       assert.ok(star.position.every(Number.isFinite));
       assert.ok(!ids.has(star.id));
@@ -42,8 +36,50 @@ test('unfolding lights a real project path from its own anchor, not a disconnect
     assert.equal(open.edges.length, group.projects.length);
     if (group.projects.length) assert.equal(open.edges[0].from.id, group.id);
     assert.ok(open.edges.slice(1).every(({ from }) => from.kind === 'project'));
+    const reached = new Set([group.id]);
+    for (const [index, { from, to }] of open.edges.entries()) {
+      assert.equal(from, index ? open.edges[index - 1].to : open.nodes.find(({ id }) => id === group.id));
+      assert.equal(reached.has(to.id), false, 'Each real project is reached exactly once');
+      reached.add(to.id);
+    }
+    assert.equal(reached.size, group.projects.length + 1);
     for (const { from, to } of open.edges) {
       assert.ok(open.nodes.includes(from) && open.nodes.includes(to), 'The connecting line uses the actual projected endpoints');
+    }
+  }
+});
+
+test('chapter paths take shorter, non-crossing routes and retain their topology while rotating and unfolding', () => {
+  const length = (edges) => edges.reduce((total, { from, to }) => total + Math.hypot(to.x - from.x, to.y - from.y), 0);
+  const side = (a, b, point) => (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x);
+  const crossing = (a, b) => side(a.from, a.to, b.from) * side(a.from, a.to, b.to) < 0 &&
+    side(b.from, b.to, a.from) * side(b.from, b.to, a.to) < 0;
+  const topology = (scene) => scene.edges.map(({ from, to }) => [from.id, to.id]);
+  for (const [width, height] of [[280, 440], [335, 450], [600, 450], [640, 520], [960, 650]]) {
+    for (const group of model.groups) {
+      const settings = { expanded: group.id, width, height, camera: { yaw: group.angle + .35, pitch: .12 } };
+      const scene = constellationScene(model, settings);
+      const byId = new Map(scene.nodes.map((star) => [star.id, star]));
+      const sourceOrder = [group.id, ...group.projects.map(({ id }) => id)];
+      const oldEdges = sourceOrder.slice(1).map((id, index) => ({ from: byId.get(sourceOrder[index]), to: byId.get(id) }));
+      assert.ok(length(scene.edges) <= length(oldEdges) + .001, `${width}/${group.id}: routing must not lengthen the old zigzag`);
+      if (group.id === 'goto' && width === 600) {
+        assert.ok(length(scene.edges) < length(oldEdges) * .75, 'The cluttered GoTo path is at least 25% shorter');
+      }
+      for (const [index, edge] of scene.edges.entries()) {
+        for (const other of scene.edges.slice(index + 2)) {
+          assert.equal(crossing(edge, other), false, `${width}/${group.id}: chapter lines must not cross at rest`);
+        }
+      }
+      const rotated = constellationScene(model, { ...settings, camera: { yaw: settings.camera.yaw + .8, pitch: -.2 } });
+      assert.deepEqual(topology(rotated), topology(scene), 'Rotating must not abruptly reconnect project stars');
+      for (const unfold of [.15, .3, .5, .7, .9]) {
+        const opening = constellationScene(model, { ...settings, unfold });
+        assert.deepEqual(topology(opening), topology(scene));
+        assert.ok(opening.edges.every(({ from, to }) => to.opacity === 0 || from.opacity > 0), 'Projects illuminate outward along the new route');
+      }
+      const retained = constellationScene(model, { width, height, discovered: [group.id] }).traces[0];
+      assert.deepEqual(retained.edges.map(({ from, to }) => [from.id, to.id]), topology(scene), 'Explored chapters preserve the same route');
     }
   }
 });

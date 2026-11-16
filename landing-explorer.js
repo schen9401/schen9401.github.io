@@ -1,10 +1,15 @@
 // Projects and the first seven skills: Misc frames 1:492 and 1:476.
 // Company overviews and Toast/Microsoft dates follow the user's brief.
+// Toast slice (opaque white outline): https://brandfolder.com/toast/media-kit/#!asset/7fvnspg4k88j2r2q8ffmff6
+// Bevi white logo: https://brandfolder.com/bevi-1/partner-marketing-hub/#!asset/jcmc9ps8q725vkf7gcnskbh
+// Bevi's original white wordmark is presented on its official blue (#246eff).
+// GoTo logo: original white/yellow footer SVG from https://www.goto.com/
 export const experiences = [
   {
     id: 'toast', label: 'Toast', role: 'Senior product designer', year: '2021–2024',
-    description: 'I bring hospitality and fintech together through restaurant POS designed for the rhythm of service.',
-    image: 'presentation/assets/check-closeout.png', alt: 'Toast POS check closeout and payment tip-entry interface.',
+    description: 'I led Toast’s all-in-one POS system to streamline restaurant operations, reimagining payments and closeout for servers and the admin home and global navigation for managers to accelerate efficiency and growth.',
+    highlights: ['all-in-one POS system', 'payments', 'closeout', 'admin home', 'global navigation'],
+    image: 'assets/work/toast-logo.svg', imageKind: 'logo', alt: 'Toast logo.',
     href: 'work/toast-closeout.html', x: 18, y: 23,
     projects: [
       { id: 'closeout', label: 'Closeout', title: 'Check-centered closeout', description: 'A clearer path through tip entry and check closure on Toast POS.', image: 'presentation/assets/check-closeout.png', alt: 'Toast closeout with checks and a payment-specific tip-entry panel.', href: 'work/toast-closeout.html', kind: 'Case study' },
@@ -14,9 +19,9 @@ export const experiences = [
     ],
   },
   {
-    id: 'goto', label: 'GoTo', role: 'Product designer', year: '2019',
-    description: 'I connect UCaaS, VoIP, and contact centers through simpler, more human calling experiences.',
-    image: 'assets/work/wallboard-cast.jpg', alt: 'GoTo contact-center wallboard with real-time metrics and charts.',
+    id: 'goto', label: 'GoTo', role: 'Product designer', year: '2019–2021',
+    description: 'I revamped GoTo’s call-center dashboards and intelligence tools, and crafted a multi-device telephony platform to boost engagement, strengthen retention, and fuel business growth.',
+    image: 'assets/work/goto-logo.svg', imageKind: 'logo', alt: 'GoTo logo.',
     href: 'work/goto-wallboard.html', x: 18, y: 50,
     projects: [
       { id: 'wallboard', label: 'Wallboard', title: 'Configurable wallboard', description: 'Choosing metrics, managing boards and sharing a real-time team view.', image: 'assets/work/wallboard-cast.jpg', alt: 'GoTo wallboard with configurable contact-center metrics.', href: 'work/goto-wallboard.html', kind: 'Case study' },
@@ -27,9 +32,9 @@ export const experiences = [
     ],
   },
   {
-    id: 'bevi', label: 'Bevi', role: 'Solo designer', year: '2017',
+    id: 'bevi', label: 'Bevi', role: 'Solo UX/UI designer', year: '2017–2019',
     description: 'I reimagine hydration through IoT, turning the smart water cooler into a personal, connected experience.',
-    image: 'assets/work/bevi-device.png', alt: 'Bevi standing and countertop connected beverage machines.',
+    image: 'assets/work/bevi-logo.svg', imageKind: 'logo', alt: 'Bevi logo.',
     href: 'work/#bevi', x: 18, y: 77,
     projects: [
       { id: 'dispensing', label: 'Dispensing & service', title: 'A more personal pour', description: 'Personalized dispensing, technician installation and service tools for stocking, activity and issue alerts.', image: 'assets/work/bevi-device.png', alt: 'Source Bevi standing and countertop beverage-machine designs.', href: 'work/#bevi', kind: 'Brief snapshot' },
@@ -37,9 +42,9 @@ export const experiences = [
     ],
   },
   {
-    id: 'microsoft', label: 'Microsoft', title: 'Microsoft', year: '2024–now',
-    description: 'I reimagine AI-native CRM for sellers with agents and Copilot, plus native mobile foundations for immersive video, voice, and chat. I evolve a code-ready Sales Toolkit, helping studio PMs, engineers, and designers bring designs to production faster.',
-    highlights: ['AI-native CRM', 'native mobile foundations', 'code-ready Sales Toolkit'],
+    id: 'microsoft', label: 'Microsoft', title: 'Microsoft', role: 'Senior product designer', year: '2024–now',
+    description: 'I reimagine Copilot sales agents across web and native mobile in M365, Outlook, and Dynamics 365, modernize Legacy D365 with the cross-platform canvas agentic framework and Arc design language, and lead and own the studio’s Sales vibecoding toolkit.',
+    highlights: ['sales agents', 'web', 'native mobile', 'canvas agentic framework', 'vibecoding toolkit'],
     image: 'assets/work/microsoft-logo.svg', imageKind: 'logo', alt: 'Microsoft logo.',
     href: 'resume/', link: 'View résumé',
     projects: [],
@@ -130,7 +135,7 @@ export function mountExplorer(root, onChange = () => {}) {
     memoryStars = [];
     primary = element('div', 'explorer-primary');
     primary.setAttribute('role', 'group');
-    primary.setAttribute('aria-label', state.mode === 'experience' ? 'Selected experiences' : 'Design and UX skills');
+    primary.setAttribute('aria-label', state.mode === 'experience' ? 'Career chapters' : 'Design and UX skills');
     projects = element('div', 'explorer-projects');
     projects.id = 'explorer-projects';
     projects.setAttribute('role', 'group');
@@ -195,7 +200,7 @@ export function mountExplorer(root, onChange = () => {}) {
         separator.setAttribute('aria-hidden', 'true');
         heading.append(separator);
       }
-      heading.append(element('p', 'explorer-kicker', item ? `${experience.label} · ${item.kind}` : experience.year));
+      heading.append(element('p', 'explorer-kicker', item ? `${experience.label} · ${item.kind}` : `${experience.role} · ${experience.year}`));
     }
     copy.append(heading);
     if (content.description) {
@@ -231,6 +236,7 @@ export function mountExplorer(root, onChange = () => {}) {
       const selected = state.mode === 'experience' ? state.experience === button.dataset.node : state.item === button.dataset.node;
       button.classList.toggle('is-selected', selected);
       button.classList.toggle('is-expanded', selected && state.expanded);
+      button.classList.toggle('is-muted', state.mode === 'experience' && state.expanded && !selected);
       button.classList.toggle('is-pinned', selected && state.pinned);
       button.classList.toggle('is-discovered', state.mode === 'experience' && discovered.has(button.dataset.node));
       const chapterState = button.querySelector('.explorer-chapter-state');
@@ -252,9 +258,8 @@ export function mountExplorer(root, onChange = () => {}) {
   function select(button, { pin = false, focus = false, animate = false, browse = false } = {}) {
     const kind = button.dataset.kind;
     const id = button.dataset.node;
+    if (!pin && state.pinned) return;
     if (focus && (kind === 'experience' ? state.experience === id && !state.item : state.item === id)) return;
-    if (!pin && !focus && ((kind === 'experience' && state.expanded) || (kind !== 'experience' && state.pinned && state.item))) return;
-    if (kind === 'experience' && focus && state.expanded && state.experience !== id) return;
     if (kind === 'experience') {
       const same = state.experience === id;
       const expanded = browse || (pin ? !(same && state.expanded) : same && state.expanded);
@@ -372,7 +377,6 @@ export function mountExplorer(root, onChange = () => {}) {
         button.style.width = `${star.width}px`;
         button.style.height = `${star.height}px`;
         button.style.setProperty('--star-alpha', String(star.opacity));
-        button.style.opacity = '1';
         button.style.visibility = star.opacity < .1 ? 'hidden' : 'visible';
         button.style.zIndex = String(Math.round((star.depth + 2) * 10));
         button.tabIndex = star.opacity < .1 ? -1 : 0;
@@ -380,6 +384,7 @@ export function mountExplorer(root, onChange = () => {}) {
       for (const [index, edge] of scene.edges.entries()) {
         const line = edgeElements[index];
         if (!line) continue;
+        line.classList.toggle('is-selected', state.item === edge.from.id || state.item === edge.to.id);
         for (const [name, value] of Object.entries({ x1: edge.from.x, y1: edge.from.y, x2: edge.to.x, y2: edge.to.y })) line.setAttribute(name, String(value));
         line.style.opacity = String(Math.min(edge.from.opacity, edge.to.opacity));
       }

@@ -175,13 +175,13 @@ test('website presents five cases separately from the Toast-only presentation', 
   assert.doesNotMatch(home, /data-field-pause|data-field-form|data-explorer-pin|field-cross|header-contact|landing-index/);
   assert.match(home, /<details class="field-model-switcher" data-field-model name="constellation-tools">/);
   assert.match(home, /<summary class="field-model-summary" data-field-model-summary>/);
-  assert.match(home, /<span data-field-model-label>Experience<\/span><span class="visually-hidden"> constellation model<\/span>/);
+  assert.match(home, /<span data-field-model-label>Career<\/span><span class="visually-hidden"> constellation model<\/span>/);
   assert.match(home, /class="field-model-menu" role="group" aria-label="Constellation model"/);
   assert.match(home, /data-field-mode="experience" aria-pressed="true"/);
   assert.match(home, /data-field-mode="skills" aria-pressed="false"/);
   assert.doesNotMatch(home, /<select/);
   assert.match(home, /data-field-status/);
-  assert.match(home, /Current model: Experience\./);
+  assert.match(home, /Current model: Career\./);
   assert.match(home, /<details class="field-options" data-field-options hidden name="constellation-tools">/);
   assert.match(home, /<summary class="field-options-summary">Accessibility /);
   assert.match(home, /data-explorer-reset><span>Reset<\/span>/);
@@ -190,7 +190,7 @@ test('website presents five cases separately from the Toast-only presentation', 
   assert.match(home, /<p id="field-accessibility-description">Constellation controls<\/p>/);
   assert.match(home, /Reset clears all explored chapters\./);
   assert.doesNotMatch(home, /Restart exploration|Text sparkle|data-caption-animation|field-animation-toggle/);
-  assert.match(home, /<p class="landing-eyebrow">Product designer<\/p>\s*<h1/);
+  assert.match(home, /<p class="landing-eyebrow">Senior designer<\/p>\s*<h1/);
   assert.match(home, /<p class="landing-description">[^<]+<\/p>\s*<a class="landing-work-link"/);
   assert.match(home, /<div class="field-topline field-controlbar"[^>]*>\s*<div class="explorer-empty" data-explorer-empty>\s*<p class="field-caption">Select a star to explore my chapters\.<\/p>\s*<\/div>\s*<details class="field-model-switcher"/);
   assert.doesNotMatch(home, /class="field-hint"/);
@@ -218,7 +218,7 @@ test('website presents five cases separately from the Toast-only presentation', 
   assert.match(footer, /data-field-options[\s\S]*data-field-left[\s\S]*data-field-right[\s\S]*data-lens-toggle[\s\S]*data-explorer-reset/);
   assert.equal([...home.matchAll(/data-field-options/g)].length, 1);
   assert.match(home, /AI-powered\.<br><span class="outline-word">Human-led\.<\/span>/);
-  assert.match(home, /I turn complexity and ambiguity into clarity, crafting trusted AI experiences that help us think deeper, create smarter, and move faster\./);
+  assert.match(home, /Bringing clarity to complexity and light to ambiguity—crafting trusted agentic experiences that help us think deeper, see further, and move faster\./);
   assert.match(home, /data-field-left aria-label="Select previous star"/);
   assert.match(home, /data-field-right aria-label="Select next star"/);
   assert.match(home, /data-explorer-nodes/);
@@ -263,12 +263,12 @@ test('website presents five cases separately from the Toast-only presentation', 
   }
   assert.match(css, /\.landing-eyebrow \{[^}]*font-size: 16px/);
   assert.match(css, /\.field-caption \{[^}]*font-size: 16px; line-height: 1\.6;/);
-  assert.match(css, /\.field-topline \{[^}]*display: grid; grid-template-columns: minmax\(0, 1fr\) 160px; align-items: center;/);
+  assert.match(css, /\.field-topline \{[^}]*display: grid; grid-template-columns: minmax\(0, 1fr\) 128px; align-items: center;/);
   assert.match(css, /\.explorer-empty \{[^}]*display: flex;[^}]*align-items: center; justify-content: center; text-align: center;/);
   assert.match(css, /\.explorer-empty \{[^}]*grid-column: 1 \/ -1; grid-row: 1;/);
   assert.match(css, /\.field-caption \{[^}]*text-wrap: balance;/);
   assert.match(css, /\.field-model-switcher \{[^}]*grid-column: 2; grid-row: 2;/);
-  assert.match(css, /@container \(min-width: 560px\) \{\s*\.explorer-empty \{ padding-inline: 176px; \}\s*\.field-model-switcher \{ grid-row: 1; \}/);
+  assert.match(css, /@container \(min-width: 560px\) \{\s*\.explorer-empty \{ padding-inline: 144px; \}\s*\.field-model-switcher \{ grid-row: 1; \}/);
   const invitationMotion = css.match(/@media \(prefers-reduced-motion: no-preference\) and \(forced-colors: none\) \{([\s\S]*?)\n\}/)?.[1];
   assert.ok(invitationMotion, 'Decorative invitation motion is opt-in to normal-motion, normal-color preferences');
   assert.match(invitationMotion, /\.field-caption \{ animation: invitation-glow [^;]* infinite both;/);
@@ -287,15 +287,20 @@ test('website presents five cases separately from the Toast-only presentation', 
   assert.match(css, /\.field-controlbar \{ grid-row: 2; \}/);
   assert.match(css, /\.explorer-inspector \{ grid-row: 3; \}/);
   assert.doesNotMatch(css, /\.field-modes\b|\.field-mode\.is-active/);
-  assert.match(css, /\.field-model-summary \{[^}]*min-width: 160px;[^}]*min-height: 44px;[^}]*border-radius: 999px;/);
+  assert.match(css, /\.field-model-summary \{[^}]*min-width: 128px;[^}]*min-height: 44px;[^}]*border-radius: 999px;/);
   assert.match(css, /\.field-model-summary:focus-visible \{ border-radius: 999px; outline-offset: 4px; \}/);
   assert.match(css, /\.field-model-switcher:not\(\[open\]\) \.field-model-menu \{ display: none; \}/);
   assert.match(css, /\.field-mode \{[^}]*min-height: 66px;/);
   assert.match(css, /\.field-mode\[aria-pressed="true"\] \.field-mode-check \{ visibility: visible; \}/);
   assert.match(css, /\.field-model-summary, \.field-model-menu \{[^}]*background: Canvas; border-color: ButtonText;/);
+  const chapterEmphasis = css.match(/@media \(forced-colors: none\) \{([\s\S]*?)\n\}/)?.[1];
+  const backgroundOpacity = chapterEmphasis?.match(/\.explorer-node--experience\.is-muted:not\(:hover\):not\(:focus-visible\) \{ opacity: ([.\d]+); \}/)?.[1];
+  assert.ok(Number(backgroundOpacity) > 0 && Number(backgroundOpacity) <= .3, 'Inactive chapter buttons, including labels, fade together except on hover or keyboard focus');
+  assert.match(chapterEmphasis, /\.explorer-nodes:has\(\.explorer-node--experience\.is-expanded\) \.explorer-memories \{ opacity: \.15; \}/);
   assert.match(css, /\.landing-eyebrow, \.field-model-summary, \.field-options-summary \{ font-family: var\(--mono\); letter-spacing: \.06em/);
-  assert.match(css, /\.explorer-detail\.has-image \{[^}]*grid-template-columns: 102px minmax\(0, 1fr\); gap: 18px/);
-  assert.match(css, /\.explorer-description strong \{ color: var\(--ink\); font-weight: 600; \}/);
+  assert.match(css, /\.explorer-detail\.has-image \{[^}]*grid-template-columns: minmax\(0, 1fr\) minmax\(0, 4fr\); align-items: stretch; gap: 24px/);
+  assert.doesNotMatch(css, /\.explorer-visual \{[^}]*(?:border|background)/);
+  assert.match(css, /\.explorer-description strong \{ color: var\(--ink\); font-weight: 500; \}/);
   assert.match(css, /@media \(max-width: 360px\) \{\s*\.explorer-inspector \{ min-height: 540px; \}/);
   const site = await readFile(resolve(root, 'site.js'), 'utf8');
   for (const hash of ['#work', '#more-work', '#resume', '#about']) assert.ok(site.includes(`'${hash}'`));
@@ -314,7 +319,7 @@ test('website presents five cases separately from the Toast-only presentation', 
 
 test('all explorer destinations and genuine source previews resolve, including precise snapshot fragments', async () => {
   assert.deepEqual(experiences.map(({ label, year }) => [label, year]), [
-    ['Toast', '2021–2024'], ['GoTo', '2019'], ['Bevi', '2017'], ['Microsoft', '2024–now'],
+    ['Toast', '2021–2024'], ['GoTo', '2019–2021'], ['Bevi', '2017–2019'], ['Microsoft', '2024–now'],
   ]);
   assert.equal(skills.length, 8);
   assert.equal(skills.at(-1).label, 'Vibe-coding');

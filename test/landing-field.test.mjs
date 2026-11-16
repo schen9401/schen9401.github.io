@@ -221,7 +221,9 @@ test('the sky starts idle and the pill switcher changes models without starting 
   assert.equal(field.root.dataset.fieldForm, 'skills', 'Choosing the current option does not toggle to the opposite model');
   field.changeMode('experience');
   assert.equal(field.root.dataset.fieldForm, 'network');
-  assert.equal(field.nodes.get('[data-field-status]').textContent, 'Current model: Experience.');
+  assert.equal(field.nodes.get('[data-field-status]').textContent, 'Current model: Career.');
+  assert.equal(field.nodes.get('[data-field-model-label]').textContent, 'Career');
+  assert.equal(field.nodes.get('[data-field-stage]').getAttribute('aria-label'), 'My career constellation');
   field.controller.destroy();
   assert.equal(field.frames.size, 0);
 });

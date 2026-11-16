@@ -333,10 +333,10 @@ export function mountField(root, environment = window) {
     if (mode === next) return;
     mode = next;
     const isSkills = mode === 'skills';
-    const name = isSkills ? 'Skills' : 'Experience';
+    const name = isSkills ? 'Skills' : 'Career';
     root.dataset.fieldForm = isSkills ? 'skills' : 'network';
     status.textContent = `Current model: ${name}.`;
-    stage.setAttribute('aria-label', `My ${mode} constellation`);
+    stage.setAttribute('aria-label', `My ${name.toLowerCase()} constellation`);
     modelLabel.textContent = name;
     for (const button of forms) button.setAttribute('aria-pressed', String(button.dataset.fieldMode === mode));
     explorer?.setMode(mode);

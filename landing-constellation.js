@@ -34,10 +34,9 @@ export function constellationGeometry(experiences, skills) {
         position: [origin[0] + Math.cos(angle) * x + Math.sin(angle) * z, origin[1] + y, origin[2] - Math.sin(angle) * x + Math.cos(angle) * z],
       };
     });
-    const sequence = [experience.id, ...projects.map(({ id }) => id)];
     return {
       id: experience.id, angle, anchor: { id: experience.id, kind: 'experience', position: origin },
-      projects, edges: sequence.slice(1).map((id, row) => [sequence[row], id]),
+      projects,
     };
   });
   const skillPositions = [[-1.22, .3, 0], [-.64, .04, 0], [-.06, -.02, 0], [.52, -.16, 0], [.52, .42, 0], [1.1, .42, 0], [1.1, -.16, 0], [1.1, -.92, 0]];
@@ -142,15 +141,27 @@ export function transitionScene(scene, origins, progress) {
   return scene;
 }
 
+function shortestChapterPath(anchor, projects) {
+  let shortest = [];
+  let shortestDistance = Infinity;
+  function visit(path, remaining, distance) {
+    if (distance >= shortestDistance) return;
+    if (!remaining.length) {
+      shortest = path;
+      shortestDistance = distance;
+      return;
+    }
+    const from = path.at(-1);
+    for (const [index, to] of remaining.entries()) {
+      visit([...path, to], remaining.filter((_, row) => row !== index), distance + Math.hypot(to.x - from.x, to.y - from.y));
+    }
+  }
+  visit([anchor], projects, 0);
+  return shortest.slice(1).map((star, index) => [shortest[index].id, star.id]);
+}
+
 export function constellationScene(model, { mode = 'experience', expanded = null, discovered = [], unfold = 1, camera = { yaw: 0, pitch: .12 }, width, height }) {
   const group = model.groups.find(({ id }) => id === expanded);
-  const sources = mode === 'skills' ? model.skills.map((star) => ({ ...star, reveal: 1 })) : [
-    ...model.groups.map(({ anchor }) => ({ ...anchor, reveal: 1 })),
-    ...(group ? group.projects.map((star, index) => {
-      const progress = clamp((unfold - index * .09) / .64, 0, 1);
-      return { ...star, reveal: clamp((progress - .18) / .5, 0, 1) };
-    }) : []),
-  ];
   const size = Math.min(width, height) * .44;
   const project = (star, view = camera) => {
     const projected = projectPoint(star.position, view.yaw, { x: 0, y: (view.pitch - .32) / .22 }, size);
@@ -162,15 +173,32 @@ export function constellationScene(model, { mode = 'experience', expanded = null
   const restingCamera = { yaw: group && mode === 'experience' ? group.angle + .35 : 0, pitch: .12 };
   const restingSources = mode === 'skills' ? model.skills : [...model.groups.map(({ anchor }) => anchor), ...(group?.projects || [])];
   const reference = restingSources.map((star) => project({ ...star, reveal: 1 }, restingCamera));
+  function chapterEdges(chapter) {
+    if (!chapter.projects.length) return [];
+    // Route the resting layout so camera movement never rewires the constellation.
+    const chapterReference = chapter === group ? reference : [...model.groups.map(({ anchor }) => anchor), ...chapter.projects]
+      .map((star) => project({ ...star, reveal: 1 }, { yaw: chapter.angle + .35, pitch: .12 }));
+    const resting = new Map(arrangeStars(chapterReference, width, height).map((star) => [star.id, star]));
+    return shortestChapterPath(resting.get(chapter.id), chapter.projects.map(({ id }) => resting.get(id)));
+  }
+  const path = mode === 'skills' ? model.skillEdges : group ? chapterEdges(group) : [];
+  const revealOrder = new Map(path.map(([, id], index) => [id, index]));
+  const sources = mode === 'skills' ? model.skills.map((star) => ({ ...star, reveal: 1 })) : [
+    ...model.groups.map(({ anchor }) => ({ ...anchor, reveal: 1 })),
+    ...(group ? group.projects.map((star) => {
+      const progress = clamp((unfold - revealOrder.get(star.id) * .09) / .64, 0, 1);
+      return { ...star, reveal: clamp((progress - .18) / .5, 0, 1) };
+    }) : []),
+  ];
   const nodes = arrangeStars(sources.map((star) => project(star)), width, height, reference);
   const byId = new Map(nodes.map((node) => [node.id, node]));
-  const edges = (mode === 'skills' ? model.skillEdges : group?.edges || []).map(([from, to]) => ({
+  const edges = path.map(([from, to]) => ({
     from: byId.get(from), to: byId.get(to),
   }));
   const traces = mode === 'skills' ? [] : model.groups.filter(({ id }) => discovered.includes(id) && id !== expanded).map((chapter) => {
     const stars = [byId.get(chapter.id), ...chapter.projects.map((star) => project({ ...star, reveal: 1 }))];
     const points = new Map(stars.map((star) => [star.id, star]));
-    return { id: chapter.id, nodes: stars, edges: chapter.edges.map(([from, to]) => ({ from: points.get(from), to: points.get(to) })) };
+    return { id: chapter.id, nodes: stars, edges: chapterEdges(chapter).map(([from, to]) => ({ from: points.get(from), to: points.get(to) })) };
   });
   return { nodes, edges, traces, width, height };
 }
